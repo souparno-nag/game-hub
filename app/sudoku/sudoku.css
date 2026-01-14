@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
+@import "tailwindcss";
+
+@theme {
+    --font-caveat: "Caveat", cursive;
+    --color-sudoku-vermillion: #e76f51; 
+    --color-sudoku-offwhite: #e9c46a;
+    --color-sudoku-blueandgrey: #264653;
+} /* coolers sunny beach day */
