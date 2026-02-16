@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import "./sudoku.css";
 
+// Helper functions
+
 function generateFullBoard(): number[][] {
     // initialize an empty 9*9 board
     const board: number[][] = Array(9).fill(null).map(() => Array(9).fill(0));
@@ -23,7 +25,7 @@ function solveSudoku(board: number[][]): boolean {
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             if (board[row][col] == 0) {
-                const numbers: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+                const numbers: number[] = shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]);
                 for (const num of numbers) {
                     if (isValid(board, row, col, num)) {
                         board[row][col] = num;
@@ -53,14 +55,70 @@ function isValid(board: number[][], row: number, col: number, num: number): bool
     }
     return true;
 }
-function shuffle(array: number[]): number[] {
+function shuffle<T>(array: T[]): T[] {
     for (let i = 0; i < array.length - 1; i++) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
 }
-
+function createPuzzle(board: number[][], difficulty: string) : number[][] {
+    // Copy the complete board
+    const puzzle = board.map(row => [...row]);
+    // Determine ow many cells to remove based on difficulty
+    const cellsToRemove : number = {
+        easy: 40, // ~41 cells remain
+        medium: 50, // ~31 cells remain
+        hard: 55, // ~26 cells remain
+        expert: 60 // ~21 cells remain
+    } [difficulty] ?? 40;
+    // Get all cell positions
+    const positions : number[][] = [];
+    for (let i = 0; i < 81; i++) {
+        positions.push([Math.floor(i/9), i%9]);
+    }
+    // Shuffle positions
+    shuffle(positions);
+    // Try to remove each cell while ensuring unique solutions
+    let removeCount : number = 0;
+    for (const [row, col] of positions) {
+        if (removeCount >= cellsToRemove) break;
+        // Store the value before removing
+        const temp : number = puzzle[row][col];
+        puzzle[row][col] = 0;
+        if (hasUniqueSolution(puzzle)) {
+            removeCount++;
+        } else {
+            puzzle[row][col] = temp;
+        }
+    }
+    return puzzle;
+}
+function hasUniqueSolution(puzzle: number[][]) {
+    const solutions = [];
+    function countSolutions(board : number[][]) {
+        if (solutions.length > 1) return;
+        for (let row = 0; row < 9; row++) {
+            for (let col = 0; col < 9; col++) {
+                if (board[row][col] === 0) {
+                    for (let num = 1; num <= 9; num++) {
+                        if (isValid(board, row, col, num)) {
+                            board[row][col] = num;
+                            countSolutions(board);
+                            board[row][col] = 0;
+                            if (solutions.length > 1) return;
+                        }
+                    }
+                    return; // no valid number for this cell
+                }
+            }
+        }
+        // Found a solution
+        solutions.push(board.map(row => [...row]));
+    }
+    countSolutions(puzzle.map(row => [...row]));
+    return solutions.length === 1;
+}
 export default function Sudoku() {
     // Initialize state with empty board
     const [board, setBoard] = useState<number[][]>([]);
@@ -71,7 +129,8 @@ export default function Sudoku() {
             const newBoard = generateFullBoard();
             fillDiagonalBoxes(newBoard);
             solveSudoku(newBoard);
-            setBoard(newBoard);
+            const puzzleBoard = createPuzzle(newBoard, "expert");
+            setBoard(puzzleBoard);
         })
     }, []);
 
