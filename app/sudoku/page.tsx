@@ -122,6 +122,7 @@ function hasUniqueSolution(puzzle: number[][]) {
 export default function Sudoku() {
     // Initialize state with empty board
     const [board, setBoard] = useState<number[][]>([]);
+    const [solutionBoard, setSolutionBoard] = useState<number[][]> ([]);
 
     // Generate a valid board only on the client using useEffect
     useEffect(() => {
@@ -129,9 +130,10 @@ export default function Sudoku() {
             const newBoard = generateFullBoard();
             fillDiagonalBoxes(newBoard);
             solveSudoku(newBoard);
+            setSolutionBoard(newBoard);
             const puzzleBoard = createPuzzle(newBoard, "expert");
             setBoard(puzzleBoard);
-        })
+        });
     }, []);
 
     // Don't render the grid until the board is generated
@@ -140,7 +142,7 @@ export default function Sudoku() {
             <div className="min-h-screen bg-sudoku-vermillion text-black flex items-center justify-center">
                 Loading Game...
             </div>
-        )
+        );
     }
 
     return (
@@ -152,13 +154,13 @@ export default function Sudoku() {
                         return (
                             <div key={rowIndex} className="border-2 border-sudoku-blueandgrey h-10 flex items-center justify-center">{
                                 row.map((cell, cellIndex) => (
-                                    <span className="p-2 border-2 border-sudoku-blueandgrey bg-sudoku-offwhite" key={cellIndex}>{cell}</span>
-                                ))
+                                        <span className="w-10 h-10 flex items-center justify-center border-2 border-sudoku-blueandgrey bg-sudoku-offwhite" key={cellIndex}>{(cell !== 0 ? <span className="text-lg">{cell}</span> : <input type="number" className="w-full h-full text-center text-lg bg-transparent outline-none" />)}</span>
+                                    ))
                             }</div>
                         )
                     })
                 }
             </div>
         </div>
-    )
+    );
 }
