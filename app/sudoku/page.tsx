@@ -147,8 +147,9 @@ export default function Sudoku() {
 
     // Check if the game has been won and duly update gameState
     useEffect(() => {
-        const boardSize = board.length;
+        const boardSize: number = board.length;
         let check: boolean = true;
+        if (boardSize === 0) return;
         for (let i = 0; i < boardSize; i++) {
             for (let j = 0; j < boardSize; j++) {
                 if (board[i][j] !== solutionBoard[i][j]) {
@@ -179,7 +180,7 @@ export default function Sudoku() {
             <div className="flex-1 flex items-center justify-center font-caveat text-6xl">Sudoku</div>
             <div className="flex-1 flex flex-col gap-0 m-2">
                 {
-                    board.map((row, rowIndex) => {
+                    initialBoard.map((row, rowIndex) => {
                         return (
                             <div
                                 key={rowIndex}
@@ -188,17 +189,19 @@ export default function Sudoku() {
                                         <span
                                             className="w-10 h-10 flex items-center justify-center border-2 border-sudoku-blueandgrey bg-sudoku-offwhite"
                                             key={cellIndex}>{(cell !== 0 ?
-                                                <span className={`text-lg ${initialBoard[rowIndex][cellIndex] === 0 ? (cell === solutionBoard[rowIndex][cellIndex] ? 'text-green-600' : 'text-red-500') : ''}`}>{cell}</span> :
-                                                <input
-                                                    type="text"
-                                                    value={""}
-                                                    onChange={(e) => {
-                                                        const val = parseInt(e.target.value);
-                                                        setBoard(handleCellChange(board, rowIndex, cellIndex, isNaN(val) ? 0 : val));
-                                                    }}
-                                                    maxLength={1}
-                                                    className={`w-full h-full text-center text-lg bg-transparent outline-none`}
-                                                />)}
+                                                <span className={`text-lg`}>{cell}</span> :
+                                                board[rowIndex][cellIndex] === 0 ?
+                                                    <input
+                                                        type="text"
+                                                        onChange={(e) => {
+                                                            const val = parseInt(e.target.value);
+                                                            setBoard(handleCellChange(board, rowIndex, cellIndex, isNaN(val) ? 0 : val));
+                                                        }}
+                                                        maxLength={1}
+                                                        className={`w-full h-full text-center text-lg bg-transparent outline-none`}
+                                                    />
+                                                    : <span className={`text-lg ${board[rowIndex][cellIndex] === solutionBoard[rowIndex][cellIndex] ? 'text-green-600' : 'text-red-500'}`}>{board[rowIndex][cellIndex]}</span>
+                                            )}
                                         </span>
                                     ))
                                 }</div>
