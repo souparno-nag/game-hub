@@ -62,29 +62,29 @@ function shuffle<T>(array: T[]): T[] {
     }
     return array;
 }
-function createPuzzle(board: number[][], difficulty: string) : number[][] {
+function createPuzzle(board: number[][], difficulty: string): number[][] {
     // Copy the complete board
     const puzzle = board.map(row => [...row]);
     // Determine ow many cells to remove based on difficulty
-    const cellsToRemove : number = {
+    const cellsToRemove: number = {
         easy: 40, // ~41 cells remain
         medium: 50, // ~31 cells remain
         hard: 55, // ~26 cells remain
         expert: 60 // ~21 cells remain
-    } [difficulty] ?? 40;
+    }[difficulty] ?? 40;
     // Get all cell positions
-    const positions : number[][] = [];
+    const positions: number[][] = [];
     for (let i = 0; i < 81; i++) {
-        positions.push([Math.floor(i/9), i%9]);
+        positions.push([Math.floor(i / 9), i % 9]);
     }
     // Shuffle positions
     shuffle(positions);
     // Try to remove each cell while ensuring unique solutions
-    let removeCount : number = 0;
+    let removeCount: number = 0;
     for (const [row, col] of positions) {
         if (removeCount >= cellsToRemove) break;
         // Store the value before removing
-        const temp : number = puzzle[row][col];
+        const temp: number = puzzle[row][col];
         puzzle[row][col] = 0;
         if (hasUniqueSolution(puzzle)) {
             removeCount++;
@@ -96,7 +96,7 @@ function createPuzzle(board: number[][], difficulty: string) : number[][] {
 }
 function hasUniqueSolution(puzzle: number[][]) {
     const solutions = [];
-    function countSolutions(board : number[][]) {
+    function countSolutions(board: number[][]) {
         if (solutions.length > 1) return;
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
@@ -119,10 +119,18 @@ function hasUniqueSolution(puzzle: number[][]) {
     countSolutions(puzzle.map(row => [...row]));
     return solutions.length === 1;
 }
+function handleCellChange(board: number[][], row: number, col: number, value: number) {
+    const tempBoard = board.map(row => [...row]);
+    if (value <= 0 || value > 9 || isNaN(value)) value = 0;
+    tempBoard[row][col] = value;
+    return tempBoard;
+}
 export default function Sudoku() {
     // Initialize state with empty board
     const [board, setBoard] = useState<number[][]>([]);
-    const [solutionBoard, setSolutionBoard] = useState<number[][]> ([]);
+    const [solutionBoard, setSolutionBoard] = useState<number[][]>([]);
+    const [initialBoard, setInitialBoard] = useState<number[][]>([]);
+    const [gameStatus, setGameStatus] = useState<"Won" | "Playing">("Playing");
 
     // Generate a valid board only on the client using useEffect
     useEffect(() => {
@@ -133,11 +141,32 @@ export default function Sudoku() {
             setSolutionBoard(newBoard);
             const puzzleBoard = createPuzzle(newBoard, "expert");
             setBoard(puzzleBoard);
+            setInitialBoard(puzzleBoard);
         });
     }, []);
 
+    // Check if the game has been won and duly update gameState
+    useEffect(() => {
+        const boardSize = board.length;
+        let check: boolean = true;
+        for (let i = 0; i < boardSize; i++) {
+            for (let j = 0; j < boardSize; j++) {
+                if (board[i][j] !== solutionBoard[i][j]) {
+                    check = false;
+                    break;
+                }
+                if (!check) break;
+            }
+        }
+        if (check) {
+            setGameStatus("Won");
+        } else {
+            setGameStatus("Playing");
+        }
+    }, [board]);
+
     // Don't render the grid until the board is generated
-    if (board.length == 0) {
+    if (initialBoard.length == 0) {
         return (
             <div className="min-h-screen bg-sudoku-vermillion text-black flex items-center justify-center">
                 Loading Game...
@@ -152,11 +181,27 @@ export default function Sudoku() {
                 {
                     board.map((row, rowIndex) => {
                         return (
-                            <div key={rowIndex} className="border-2 border-sudoku-blueandgrey h-10 flex items-center justify-center">{
-                                row.map((cell, cellIndex) => (
-                                        <span className="w-10 h-10 flex items-center justify-center border-2 border-sudoku-blueandgrey bg-sudoku-offwhite" key={cellIndex}>{(cell !== 0 ? <span className="text-lg">{cell}</span> : <input type="number" className="w-full h-full text-center text-lg bg-transparent outline-none" />)}</span>
+                            <div
+                                key={rowIndex}
+                                className="border-2 border-sudoku-blueandgrey h-10 flex items-center justify-center">{
+                                    row.map((cell, cellIndex) => (
+                                        <span
+                                            className="w-10 h-10 flex items-center justify-center border-2 border-sudoku-blueandgrey bg-sudoku-offwhite"
+                                            key={cellIndex}>{(cell !== 0 ?
+                                                <span className={`text-lg ${initialBoard[rowIndex][cellIndex] === 0 ? (cell === solutionBoard[rowIndex][cellIndex] ? 'text-green-600' : 'text-red-500') : ''}`}>{cell}</span> :
+                                                <input
+                                                    type="text"
+                                                    value={""}
+                                                    onChange={(e) => {
+                                                        const val = parseInt(e.target.value);
+                                                        setBoard(handleCellChange(board, rowIndex, cellIndex, isNaN(val) ? 0 : val));
+                                                    }}
+                                                    maxLength={1}
+                                                    className={`w-full h-full text-center text-lg bg-transparent outline-none`}
+                                                />)}
+                                        </span>
                                     ))
-                            }</div>
+                                }</div>
                         )
                     })
                 }
