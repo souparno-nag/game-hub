@@ -132,6 +132,23 @@ export default function Sudoku() {
     const [initialBoard, setInitialBoard] = useState<number[][]>([]);
     const [gameStatus, setGameStatus] = useState<"Won" | "Playing">("Playing");
     const [difficulty, setDifficulty] = useState<string>("medium");
+    const [timer, setTimer] = useState(0);
+    const [score, setScore] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+
+
+    const resetGame = (level: string) => {
+        const newBoard = generateFullBoard();
+        fillDiagonalBoxes(newBoard);
+        solveSudoku(newBoard);
+        setSolutionBoard(newBoard);
+        const puzzleBoard = createPuzzle(newBoard, level);
+        setBoard(puzzleBoard);
+        setInitialBoard(puzzleBoard);
+        setDifficulty(level);
+        setTimer(0);
+        setGameStatus("Playing");
+    };
 
     // Generate a valid board only on the client using useEffect
     useEffect(() => {
@@ -166,6 +183,33 @@ export default function Sudoku() {
             setGameStatus("Playing");
         }
     }, [board,solutionBoard]);
+
+    // Timer Logic
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (gameStatus === "Playing" && !isPaused && initialBoard.length > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev + 1);
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [gameStatus, isPaused, initialBoard]);
+
+    // Score calculation when won
+    useEffect(() => {
+        if (gameStatus === "Won") {
+            const difficultyBonus = { easy: 1000, medium: 2000, hard: 3000, expert: 5000 }[difficulty];
+            const timePenalty = timer * 2;
+            setScore(Math.max(0, difficultyBonus - timePenalty));
+        }
+    }, [gameStatus]);
+
+    // Formatting helper
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
 
     // Don't render the grid until the board is generated
     if (initialBoard.length == 0) {
@@ -241,6 +285,19 @@ export default function Sudoku() {
                         )
                     })
                 }
+            </div>
+            <div className="flex gap-4 mb-4">
+                {['easy', 'medium', 'hard', 'expert'].map((lvl) => (
+                    <button
+                        key={lvl}
+                        onClick={() => resetGame(lvl)}
+                        className={`px-3 py-1 rounded capitalize ${
+                            difficulty === lvl ? 'bg-sudoku-blueandgrey text-white' : 'bg-sudoku-offwhite'
+                        }`}
+                    >
+                        {lvl}
+                    </button>
+                ))}
             </div>
         </div>
     );
