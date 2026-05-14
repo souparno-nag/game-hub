@@ -126,16 +126,18 @@ function handleCellChange(board: number[][], row: number, col: number, value: nu
     return tempBoard;
 }
 export default function Sudoku() {
-    // Initialize state with empty board
+    // --- Existing State ---
     const [board, setBoard] = useState<number[][]>([]);
     const [solutionBoard, setSolutionBoard] = useState<number[][]>([]);
     const [initialBoard, setInitialBoard] = useState<number[][]>([]);
-    const [gameStatus, setGameStatus] = useState<"Won" | "Playing">("Playing");
-    const [difficulty, setDifficulty] = useState<string>("medium");
+    const [gameStatus, setGameStatus] = useState<"Won" | "Playing" | "Lost">("Playing");    const [difficulty, setDifficulty] = useState<string>("easy"); // Changed default to match UI
     const [timer, setTimer] = useState(0);
     const [score, setScore] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
 
+    // --- New State for UI ---
+    const [selectedCell, setSelectedCell] = useState<{r: number, c: number} | null>(null);
+    const [mistakes, setMistakes] = useState(0);
 
     const resetGame = (level: string) => {
         const newBoard = generateFullBoard();
@@ -147,23 +149,19 @@ export default function Sudoku() {
         setInitialBoard(puzzleBoard);
         setDifficulty(level);
         setTimer(0);
+        setMistakes(0); // Reset mistakes
+        setSelectedCell(null); // Clear selection
         setGameStatus("Playing");
     };
 
-    // Generate a valid board only on the client using useEffect
+    // Initialization
     useEffect(() => {
         requestAnimationFrame(() => {
-            const newBoard = generateFullBoard();
-            fillDiagonalBoxes(newBoard);
-            solveSudoku(newBoard);
-            setSolutionBoard(newBoard);
-            const puzzleBoard = createPuzzle(newBoard, "expert");
-            setBoard(puzzleBoard);
-            setInitialBoard(puzzleBoard);
+            resetGame("easy"); // Initialize with easy to match your screenshot
         });
     }, []);
 
-    // Check if the game has been won and duly update gameState
+    // Win check logic (Unchanged)
     useEffect(() => {
         const boardSize: number = board.length;
         let check: boolean = true;
@@ -177,128 +175,260 @@ export default function Sudoku() {
                 if (!check) break;
             }
         }
-        if (check) {
-            setGameStatus("Won");
-        } else {
-            setGameStatus("Playing");
-        }
-    }, [board,solutionBoard]);
+        if (check) setGameStatus("Won");
+        else setGameStatus("Playing");
+    }, [board, solutionBoard]);
 
-    // Timer Logic
+    // Timer Logic (Unchanged)
     useEffect(() => {
         let interval: NodeJS.Timeout;
         if (gameStatus === "Playing" && !isPaused && initialBoard.length > 0) {
-            interval = setInterval(() => {
-                setTimer((prev) => prev + 1);
-            }, 1000);
+            interval = setInterval(() => setTimer((prev) => prev + 1), 1000);
         }
         return () => clearInterval(interval);
     }, [gameStatus, isPaused, initialBoard]);
 
-    // Score calculation when won
-    useEffect(() => {
-        if (gameStatus === "Won") {
-            const difficultyBonus = { easy: 1000, medium: 2000, hard: 3000, expert: 5000 }[difficulty];
-            const timePenalty = timer * 2;
-            setScore(Math.max(0, difficultyBonus - timePenalty));
-        }
-    }, [gameStatus]);
-
-    // Formatting helper
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    // Don't render the grid until the board is generated
-    if (initialBoard.length == 0) {
-        return (
-            <div className="min-h-screen bg-sudoku-vermillion text-black flex items-center justify-center">
-                Loading Game...
-            </div>
-        );
+    // --- New Handler for Number Pad ---
+    const handleNumberPadClick = (num: number) => {
+        if (!selectedCell || gameStatus !== "Playing") return;
+        const { r, c } = selectedCell;
+        
+        // Don't overwrite initial puzzle numbers
+        if (initialBoard[r][c] !== 0) return;
+
+        setBoard(prev => handleCellChange(prev, r, c, num));
+
+        // Validation for mistakes counter
+        if (num !== 0 && num !== solutionBoard[r][c]) {
+            const newMistakeCount = mistakes + 1;
+            setMistakes(newMistakeCount);
+
+            // Check for Game Over condition
+            if (newMistakeCount >= 3) {
+                setGameStatus("Lost");
+            } else {
+                // If they haven't lost yet, wipe the wrong number after 3 seconds
+                setTimeout(() => {
+                    setBoard(prev => handleCellChange(prev, r, c, 0));
+                }, 3000);
+            }
+        }
+    };
+
+    const handleErase = () => {
+        // Prevent erasing if no cell is selected, or if the game is over
+        if (!selectedCell || gameStatus !== "Playing") return;
+        
+        const { r, c } = selectedCell;
+        
+        // Prevent erasing the puzzle's starting numbers
+        if (initialBoard[r][c] !== 0) return;
+
+        // Reset the cell to 0 (empty)
+        setBoard(prev => handleCellChange(prev, r, c, 0));
+    };
+
+    // --- Keyboard Support ---
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Do nothing if game is over or no cell is selected
+            if (gameStatus !== "Playing" || !selectedCell) return;
+
+            // Handle Numbers 1-9
+            if (e.key >= '1' && e.key <= '9') {
+                handleNumberPadClick(parseInt(e.key));
+            }
+            // Handle Erase (Backspace or Delete)
+            else if (e.key === 'Backspace' || e.key === 'Delete') {
+                handleErase();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        
+        // Cleanup listener to prevent memory leaks
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedCell, gameStatus, handleNumberPadClick, handleErase]);
+
+    if (initialBoard.length === 0) {
+        return <div className="min-h-screen bg-background text-on-background flex items-center justify-center font-headline font-bold">Loading Kinetic Grid...</div>;
     }
 
     return (
-        <div className="min-h-screen bg-sudoku-vermillion text-black flex flex-col items-center justify-center content-evenly">
-            <div className="flex-1 flex items-center justify-center font-caveat text-6xl">Sudoku</div>
-            <div className="flex-1 flex flex-col gap-0 m-2">
-                {
-                    initialBoard.map((row, rowIndex) => {
-                        return (
-                            <div
-                                key={rowIndex}
-                                className="border-2 border-sudoku-blueandgrey h-10 flex items-center justify-center">{
-                                    row.map((cell, cellIndex) => {
-                                        const isInitial = initialBoard[rowIndex][cellIndex] !== 0;
-                                        const currentValue = board[rowIndex][cellIndex];
-                                        const solutionValue = solutionBoard[rowIndex][cellIndex];
-                                        
-                                        // Determine if the current cell has been solved correctly
-                                        const isCorrect = !isInitial && currentValue === solutionValue;
-                                        // Determine if the current cell is currently wrong (and not empty)
-                                        const isWrong = !isInitial && currentValue !== 0 && currentValue !== solutionValue;
+        <div className="bg-background text-on-background font-body min-h-screen selection:bg-primary-container/30 pb-32">
+            {/* Header */}
+            <header className="bg-[#f8f5ff] top-0 z-50">
+                <div className="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+                    <span className="text-2xl font-black tracking-tight text-[#2a2b51] font-headline">Sudoku Kinetic</span>
+                    <nav className="hidden md:flex items-center gap-6">
+                        <a className="text-[#004be2] font-bold border-b-4 border-[#004be2] py-1" href="#">Play</a>
+                        <a className="text-[#575881] font-medium hover:text-[#004be2] py-1" href="#">Stats</a>
+                    </nav>
+                </div>
+            </header>
 
+            <main className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    
+                    {/* Left Column: Difficulty & Stats */}
+                    <div className="lg:col-span-3 space-y-6">
+                        <div className="bg-surface-container-low rounded-[2rem] p-6 space-y-6">
+                            <div>
+                                <span className="text-on-surface-variant text-xs font-bold uppercase tracking-widest block mb-4">Difficulty</span>
+                                <div className="flex flex-col gap-2">
+                                    {['easy', 'medium', 'hard'].map((lvl) => {
+                                        const isActive = difficulty === lvl;
                                         return (
-                                            <span
-                                                className={`w-10 h-10 flex items-center justify-center border-2 bg-sudoku-offwhite 
-                                                    ${isWrong ? 'border-red-500' : 'border-sudoku-blueandgrey'}`}
-                                                key={cellIndex}
+                                            <button
+                                                key={lvl}
+                                                onClick={() => resetGame(lvl)}
+                                                className={`flex items-center justify-between px-4 py-3 rounded-xl font-bold transition-all ${
+                                                    isActive ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
+                                                }`}
                                             >
-                                                {isInitial || isCorrect ? (
-                                                    /* Static view for Initial numbers and Correct guesses */
-                                                    <span className={`text-lg ${isCorrect ? 'text-green-600 font-bold' : 'text-black'}`}>
-                                                        {currentValue}
-                                                    </span>
-                                                ) : (
-                                                    /* Input view for empty or wrong cells */
-                                                    <input
-                                                        type="text"
-                                                        value={currentValue === 0 ? '' : currentValue}
-                                                        onChange={(e) => {
-                                                            const val = parseInt(e.target.value);
-                                                            const inputVal = isNaN(val) ? 0 : val;
-                                                            
-                                                            // Update the board immediately
-                                                            setBoard(handleCellChange(board, rowIndex, cellIndex, inputVal));
+                                                <span className="capitalize">{lvl}</span>
+                                                {isActive && <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>}
+                                            </button>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                            <div className="pt-4 border-t border-outline-variant/20">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-1">
+                                        <span className="text-on-surface-variant text-[10px] font-bold uppercase tracking-widest">Timer</span>
+                                        <div className="text-xl font-headline font-extrabold text-on-surface">{formatTime(timer)}</div>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <span className="text-on-surface-variant text-[10px] font-bold uppercase tracking-widest">Mistakes</span>
+                                        <div className="text-xl font-headline font-extrabold text-error">{mistakes}/3</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* --- NEW: Quick Actions Block --- */}
+                        <div className="bg-surface-container-low rounded-[2rem] p-6 mt-6">
+                            <span className="text-on-surface-variant text-xs font-bold uppercase tracking-widest block mb-4">Quick Actions</span>
+                            <div className="grid grid-cols-2 gap-3">
+                                <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-all active:scale-95">
+                                    <span className="material-symbols-outlined">undo</span>
+                                    <span className="text-[10px] font-bold uppercase">Undo</span>
+                                </button>
+                                <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-all active:scale-95">
+                                    <span className="material-symbols-outlined">lightbulb</span>
+                                    <span className="text-[10px] font-bold uppercase">Hint</span>
+                                </button>
+                                <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-all active:scale-95">
+                                    <span className="material-symbols-outlined">edit</span>
+                                    <span className="text-[10px] font-bold uppercase">Notes</span>
+                                </button>
+                                <button 
+                                    onClick={handleErase}
+                                    className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-all active:scale-95"
+                                >
+                                    <span className="material-symbols-outlined">delete</span>
+                                    <span className="text-[10px] font-bold uppercase">Erase</span>
+                                </button>
+                            </div>
+                        </div>
+                        {/* --- End Quick Actions --- */}
 
-                                                            // Validation Logic
-                                                            if (inputVal !== 0 && inputVal !== solutionValue) {
-                                                                alert("Warning: Incorrect number!");
-                                                                
-                                                                // Reset the cell after 3 seconds
-                                                                setTimeout(() => {
-                                                                    setBoard(prevBoard => handleCellChange(prevBoard, rowIndex, cellIndex, 0));
-                                                                }, 3000);
-                                                            }
-                                                        }}
-                                                        maxLength={1}
-                                                        className={`w-full h-full text-center text-lg bg-transparent outline-none 
-                                                            ${isWrong ? 'text-red-500' : 'text-black'}`}
-                                                    />
-                                                )}
-                                            </span>
-                                        );
-                                    })
-                                }</div>
-                        )
-                    })
-                }
-            </div>
-            <div className="flex gap-4 mb-4">
-                {['easy', 'medium', 'hard', 'expert'].map((lvl) => (
-                    <button
-                        key={lvl}
-                        onClick={() => resetGame(lvl)}
-                        className={`px-3 py-1 rounded capitalize ${
-                            difficulty === lvl ? 'bg-sudoku-blueandgrey text-white' : 'bg-sudoku-offwhite'
-                        }`}
-                    >
-                        {lvl}
-                    </button>
-                ))}
-            </div>
+                    </div>
+
+                    {/* Middle Column: The Grid */}
+                    <div className="lg:col-span-6 flex justify-center">
+                        <div className="relative group">
+                            <div className="absolute -inset-4 bg-primary-container/10 blur-3xl rounded-full opacity-50"></div>
+
+                            {/* NEW: Game Over / Win Overlay */}
+                            {gameStatus !== "Playing" && (
+                                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-surface-container-high/80 backdrop-blur-sm rounded-3xl">
+                                    <span className={`text-5xl font-black mb-2 ${gameStatus === "Won" ? "text-tertiary" : "text-error"}`}>
+                                        {gameStatus === "Won" ? "You Win!" : "Game Over"}
+                                    </span>
+                                    <button 
+                                        onClick={() => resetGame(difficulty)}
+                                        className="mt-4 px-6 py-2 bg-primary text-on-primary rounded-full font-bold shadow-lg"
+                                    >
+                                        Try Again
+                                    </button>
+                                </div>
+                            )}
+                            
+                            {/* React Matrix mapped to 3x3 Block Grid */}
+                            <div className="relative bg-surface-container-high p-1.5 rounded-3xl shadow-xl grid grid-cols-3 gap-1.5">
+                                {[...Array(9)].map((_, boxIndex) => (
+                                    <div key={boxIndex} className="grid grid-cols-3 gap-0.5 bg-surface-container-highest p-0.5 rounded-lg overflow-hidden">
+                                        {[...Array(9)].map((_, cellIdx) => {
+                                            // Calculate actual row/col from block logic
+                                            const r = Math.floor(boxIndex / 3) * 3 + Math.floor(cellIdx / 3);
+                                            const c = (boxIndex % 3) * 3 + (cellIdx % 3);
+                                            
+                                            const isInitial = initialBoard[r][c] !== 0;
+                                            const currentValue = board[r][c];
+                                            const solutionValue = solutionBoard[r][c];
+                                            
+                                            const isWrong = !isInitial && currentValue !== 0 && currentValue !== solutionValue;
+                                            const isSelected = selectedCell?.r === r && selectedCell?.c === c;
+
+                                            // Determine text color
+                                            let textClass = "text-on-surface"; // Default for initial
+                                            if (!isInitial && currentValue !== 0) {
+                                                textClass = isWrong ? "text-error" : "text-primary";
+                                            }
+
+                                            return (
+                                                <div
+                                                    key={`${r}-${c}`}
+                                                    onClick={() => !isInitial && setSelectedCell({r, c})}
+                                                    className={`w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-surface-container-lowest text-2xl font-headline font-bold cursor-pointer transition-colors
+                                                        ${isSelected ? 'bg-secondary-container shadow-[inset_0_0_0_3px_#fdd400]' : 'hover:bg-surface-container'}
+                                                        ${textClass}
+                                                    `}
+                                                >
+                                                    {currentValue === 0 ? '' : currentValue}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Column: Number Pad */}
+                    <div className="lg:col-span-3 space-y-6">
+                        <div className="bg-surface-container-low rounded-[2rem] p-6 space-y-6">
+                            <span className="text-on-surface-variant text-xs font-bold uppercase tracking-widest block mb-4">Input Pad</span>
+                            <div className="grid grid-cols-3 gap-3">
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                                    <button
+                                        key={num}
+                                        onClick={() => handleNumberPadClick(num)}
+                                        className="aspect-square flex items-center justify-center text-2xl font-headline font-bold bg-secondary-container text-on-secondary-container rounded-2xl shadow-sm hover:scale-105 active:scale-95 transition-transform"
+                                    >
+                                        {num}
+                                    </button>
+                                ))}
+                            </div>
+                            <button 
+                                onClick={() => resetGame(difficulty)}
+                                className="w-full py-4 rounded-full bg-primary text-on-primary font-bold flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:bg-primary-dim transition-all group"
+                            >
+                                <span>New Game</span>
+                                <span className="material-symbols-outlined group-hover:rotate-180 transition-transform duration-500">refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
         </div>
     );
 }

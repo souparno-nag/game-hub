@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -7,3 +8,64 @@
     --color-sudoku-offwhite: #e9c46a;
     --color-sudoku-blueandgrey: #264653;
 } /* coolers sunny beach day */
+
+
+@theme {
+  /* Fonts */
+  --font-headline: "Plus Jakarta Sans", sans-serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+  --font-label: "Plus Jakarta Sans", sans-serif;
+
+  /* Kinetic Playground Color System */
+  --color-on-secondary-container: #594a00;
+  --color-surface-variant: #dbd9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-high: #e1e0ff;
+  --color-surface-tint: #004be2;
+  --color-primary-container: #809bff;
+  --color-error-dim: #a70138;
+  --color-on-error-container: #510017;
+  --color-primary-fixed: #809bff;
+  --color-secondary-fixed-dim: #edc600;
+  --color-surface-dim: #d1d0ff;
+  --color-surface-bright: #f8f5ff;
+  --color-tertiary-container: #3fff8b;
+  --color-secondary-dim: #5f4e00;
+  --color-on-tertiary-container: #005d2c;
+  --color-secondary: #6d5a00;
+  --color-on-primary: #f2f1ff;
+  --color-tertiary-fixed-dim: #24f07e;
+  --color-on-primary-fixed-variant: #002376;
+  --color-secondary-container: #fdd400;
+  --color-surface-container-low: #f2efff;
+  --color-on-primary-fixed: #000000;
+  --color-surface-container: #e8e6ff;
+  --color-tertiary-dim: #005c2b;
+  --color-on-surface: #2a2b51;
+  --color-error-container: #f74b6d;
+  --color-on-error: #ffefef;
+  --color-outline: #72739e;
+  --color-on-tertiary-fixed: #004820;
+  --color-primary: #004be2;
+  --color-surface-container-highest: #dbd9ff;
+  --color-on-tertiary-fixed-variant: #006832;
+  --color-inverse-on-surface: #9999c6;
+  --color-primary-fixed-dim: #6c8cff;
+  --color-on-secondary: #fff2ce;
+  --color-secondary-fixed: #fdd400;
+  --color-primary-dim: #0041c7;
+  --color-on-surface-variant: #575881;
+  --color-error: #b41340;
+  --color-on-background: #2a2b51;
+  --color-background: #f8f5ff;
+  --color-on-primary-container: #001b61;
+  --color-outline-variant: #a9a9d7;
+  --color-on-tertiary: #cdffd3;
+  --color-tertiary-fixed: #3fff8b;
+  --color-inverse-surface: #08082f;
+  --color-surface: #f8f5ff;
+  --color-on-secondary-fixed: #433700;
+  --color-tertiary: #006a33;
+  --color-inverse-primary: #6889ff;
+  --color-on-secondary-fixed-variant: #645300;
+}
