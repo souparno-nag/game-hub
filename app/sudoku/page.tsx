@@ -131,6 +131,7 @@ export default function Sudoku() {
     const [solutionBoard, setSolutionBoard] = useState<number[][]>([]);
     const [initialBoard, setInitialBoard] = useState<number[][]>([]);
     const [gameStatus, setGameStatus] = useState<"Won" | "Playing">("Playing");
+    const [difficulty, setDifficulty] = useState<string>("medium");
 
     // Generate a valid board only on the client using useEffect
     useEffect(() => {
@@ -164,7 +165,7 @@ export default function Sudoku() {
         } else {
             setGameStatus("Playing");
         }
-    }, [board]);
+    }, [board,solutionBoard]);
 
     // Don't render the grid until the board is generated
     if (initialBoard.length == 0) {
@@ -185,25 +186,57 @@ export default function Sudoku() {
                             <div
                                 key={rowIndex}
                                 className="border-2 border-sudoku-blueandgrey h-10 flex items-center justify-center">{
-                                    row.map((cell, cellIndex) => (
-                                        <span
-                                            className="w-10 h-10 flex items-center justify-center border-2 border-sudoku-blueandgrey bg-sudoku-offwhite"
-                                            key={cellIndex}>{(cell !== 0 ?
-                                                <span className={`text-lg`}>{cell}</span> :
-                                                board[rowIndex][cellIndex] === 0 ?
+                                    row.map((cell, cellIndex) => {
+                                        const isInitial = initialBoard[rowIndex][cellIndex] !== 0;
+                                        const currentValue = board[rowIndex][cellIndex];
+                                        const solutionValue = solutionBoard[rowIndex][cellIndex];
+                                        
+                                        // Determine if the current cell has been solved correctly
+                                        const isCorrect = !isInitial && currentValue === solutionValue;
+                                        // Determine if the current cell is currently wrong (and not empty)
+                                        const isWrong = !isInitial && currentValue !== 0 && currentValue !== solutionValue;
+
+                                        return (
+                                            <span
+                                                className={`w-10 h-10 flex items-center justify-center border-2 bg-sudoku-offwhite 
+                                                    ${isWrong ? 'border-red-500' : 'border-sudoku-blueandgrey'}`}
+                                                key={cellIndex}
+                                            >
+                                                {isInitial || isCorrect ? (
+                                                    /* Static view for Initial numbers and Correct guesses */
+                                                    <span className={`text-lg ${isCorrect ? 'text-green-600 font-bold' : 'text-black'}`}>
+                                                        {currentValue}
+                                                    </span>
+                                                ) : (
+                                                    /* Input view for empty or wrong cells */
                                                     <input
                                                         type="text"
+                                                        value={currentValue === 0 ? '' : currentValue}
                                                         onChange={(e) => {
                                                             const val = parseInt(e.target.value);
-                                                            setBoard(handleCellChange(board, rowIndex, cellIndex, isNaN(val) ? 0 : val));
+                                                            const inputVal = isNaN(val) ? 0 : val;
+                                                            
+                                                            // Update the board immediately
+                                                            setBoard(handleCellChange(board, rowIndex, cellIndex, inputVal));
+
+                                                            // Validation Logic
+                                                            if (inputVal !== 0 && inputVal !== solutionValue) {
+                                                                alert("Warning: Incorrect number!");
+                                                                
+                                                                // Reset the cell after 3 seconds
+                                                                setTimeout(() => {
+                                                                    setBoard(prevBoard => handleCellChange(prevBoard, rowIndex, cellIndex, 0));
+                                                                }, 3000);
+                                                            }
                                                         }}
                                                         maxLength={1}
-                                                        className={`w-full h-full text-center text-lg bg-transparent outline-none`}
+                                                        className={`w-full h-full text-center text-lg bg-transparent outline-none 
+                                                            ${isWrong ? 'text-red-500' : 'text-black'}`}
                                                     />
-                                                    : <span className={`text-lg ${board[rowIndex][cellIndex] === solutionBoard[rowIndex][cellIndex] ? 'text-green-600' : 'text-red-500'}`}>{board[rowIndex][cellIndex]}</span>
-                                            )}
-                                        </span>
-                                    ))
+                                                )}
+                                            </span>
+                                        );
+                                    })
                                 }</div>
                         )
                     })
