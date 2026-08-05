@@ -43,3 +43,9 @@ next-env.d.ts
 # all md files except README.md
 *.md
 !README.md
+
+# agentic workflow
+.agent/
+.hallmark
+*.zip
+.tmp_unzip/
