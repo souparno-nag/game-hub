@@ -36,9 +36,12 @@
   font-size: var(--text-sm);
 }
 
-.btn:hover:not(:disabled) {
-  transform: translate(-1px, -1px);
-  box-shadow: 4px 4px 0 var(--color-line);
+/* Only where hover is real; on touch screens a tap would leave it stuck. */
+@media (hover: hover) {
+  .btn:hover:not(:disabled) {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--color-line);
+  }
 }
 
 /* Pressed: sink by --shadow-sm-offset (3px) into the shadow. */
