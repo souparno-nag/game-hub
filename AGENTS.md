@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 2 — Visual And Layout Foundation (design drafted, awaiting approval)
+**Current milestone:** 2 — Visual And Layout Foundation (design approved, plan next)
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -99,6 +99,6 @@ _Last updated: 2026-11-04_
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
 
-**Next (Milestone 2):** design in `.agent/specs/2026-11-04-milestone-2-design.md` (awaiting approval), then an implementation plan in `.agent/plans/`. Session handoff: `.agent/handoff-milestone-2.md`.
+**Next (Milestone 2):** design approved in `.agent/specs/2026-11-04-milestone-2-design.md`; implementation plan in `.agent/plans/`. Session handoff: `.agent/handoff-milestone-2.md`.
 
 **Milestones 2–10:** not started.

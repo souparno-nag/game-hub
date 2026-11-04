@@ -1,6 +1,6 @@
 # Milestone 2 Design: Visual And Layout Foundation
 
-Status: draft for approval · 2026-11-04
+Status: approved · 2026-11-04
 
 ## Intent
 
@@ -110,6 +110,22 @@ Measured contrast (WCAG): ink on bg 17.1 / 16.2; muted on bg 7.5 / 9.3; on-fill 
 
 - `src/lib/theme.ts`: pure helpers — read stored choice (storage key `game-hub:theme`, values `light`/`dark`), resolve effective theme (stored, else `prefers-color-scheme`), apply to `<html>`. All storage access wrapped in try/catch (private mode).
 - No-flash: a small inline script in `index.html` `<head>` runs the same resolve-and-apply before first paint. It duplicates the resolve logic (it cannot import modules); a comment in both places points at the other.
+
+## Per-game themes
+
+Individual games can and will have their own look. The split:
+
+- **Hub chrome** (header, page layout, `GameShell` from Milestone 4, sign-in, leaderboards, kit pieces) always uses the hub theme, so navigation feels the same everywhere.
+- **The play area** inside the shell belongs to the game: its own colours, type and art.
+
+Rules that keep this possible:
+
+1. Global base styles stay minimal: box sizing, page background, body font and colour, focus ring. No element-wide styling of `button`, `input`, `h2`, etc.; kit looks are opt-in classes (`.btn`, `.panel`) and components.
+2. Game styles are scoped to the game's own root element (class or CSS Module), never global.
+3. Games may read hub tokens, override them inside their root (custom properties cascade), or ignore them.
+4. Games meet the same bar as the hub: WCAG AA contrast and visible keyboard focus.
+
+Open, decided per game in Milestone 5: whether a game follows the hub's light/dark theme or keeps a fixed look.
 
 ## Files
 
