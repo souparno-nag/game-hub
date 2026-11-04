@@ -76,7 +76,6 @@ _Last updated: 2026-11-04_
 - Replace the Vite template `README.md` with project docs, including env setup.
 
 **Known issues**
-- `.gitignore` ends with `VITE_SUPABASE_URL=` / `VITE_SUPABASE_ANON_KEY=` lines, which are no-op ignore patterns and should be removed.
 - `.gitignore` ignores `.agent/`, so the requirements/design/milestone plan isn't versioned (may be intentional).
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
