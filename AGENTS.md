@@ -24,7 +24,8 @@ Commands:
 - `npm run build`: run TypeScript checks and produce a production build.
 - `npm run preview`: preview the production build.
 - `npm run lint`: run lint checks.
-- `npm test`: run unit/component tests once configured.
+- `npm test`: run the Vitest suite once (jsdom + Testing Library).
+- `npm run test:watch`: run Vitest in watch mode.
 
 Update this guide when scripts or tooling change.
 
@@ -35,6 +36,8 @@ Use TypeScript and React function components. Prefer explicit domain types for g
 Keep game logic, shared UI, and Supabase data access separated. Game components report completed runs to `GameShell`; they do not write scores directly.
 
 ## Testing Guidelines
+
+Vitest runs in jsdom with `src/test/setup.ts` (Testing Library cleanup). Vitest globals are off: import `describe`/`it`/`expect` from `vitest`.
 
 Prioritize tests for catalog lookup, score validation, leaderboard ordering, and game reset/completion flows. Use colocated `*.test.ts` or `*.test.tsx` files, or `src/__tests__/` if that pattern becomes clearer.
 
@@ -65,17 +68,18 @@ _Last updated: 2026-11-04_
 
 **Done**
 - Vite 8 + React 19 + TypeScript 6 scaffold; deps installed.
-- Scripts: `dev`, `build` (`tsc -b && vite build`), `preview`, `lint`. `npm run build` and `npm run lint` pass.
+- Scripts: `dev`, `build` (`tsc -b && vite build`), `preview`, `lint`, `test` (`vitest run`), `test:watch`. Build, lint, and tests pass.
+- Vitest 5 configured in `vite.config.ts` (jsdom, setup in `src/test/setup.ts`); smoke test in `src/app/App.test.tsx`.
 - Scaffold committed; `AGENTS.md` and `.agent/` are tracked.
 - Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Minimal base styles (light/dark) in `src/styles/global.css`; full theme tokens are Milestone 2.
 - Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
 
 **Remaining for Milestone 1**
-- Configure a test runner (Vitest); `npm test` is currently an echo placeholder.
 - Replace the Vite template `README.md` with project docs, including env setup.
 
-**Known issues:** none.
+**Known issues**
+- `npm audit` reports 17 advisories (12 moderate, 5 high), mostly in Vite's dev server and transitive dev deps; `npm audit fix` not yet run.
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
 
