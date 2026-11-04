@@ -64,7 +64,9 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 1 — Project Scaffold (~80% done)
+**Current milestone:** 2 — Visual And Layout Foundation (not started)
+
+**Milestone 1 — Project Scaffold:** complete.
 
 **Done**
 - Vite 8 + React 19 + TypeScript 6 scaffold; deps installed.
@@ -74,13 +76,13 @@ _Last updated: 2026-11-04_
 - Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Minimal base styles (light/dark) in `src/styles/global.css`; full theme tokens are Milestone 2.
 - Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
-
-**Remaining for Milestone 1**
-- Replace the Vite template `README.md` with project docs, including env setup.
+- `README.md` covers setup, env vars, scripts, and structure. Node 22.12+ required (Vitest 5).
 
 **Known issues**
 - `npm audit` reports 17 advisories (12 moderate, 5 high), mostly in Vite's dev server and transitive dev deps; `npm audit fix` not yet run.
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
+
+**Next (Milestone 2):** theme tokens, responsive app shell, reusable button/panel/form/status styles.
 
 **Milestones 2–10:** not started.
