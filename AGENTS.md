@@ -99,6 +99,6 @@ _Last updated: 2026-11-04_
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
 
-**Next (Milestone 2):** theme tokens, responsive app shell, reusable button/panel/form/status styles.
+**Next (Milestone 2):** theme tokens, responsive app shell, reusable button/panel/form/status styles. Session handoff: `.agent/handoff-milestone-2.md`.
 
 **Milestones 2–10:** not started.
