@@ -32,6 +32,7 @@ export function systemTheme(): Theme {
   return window.matchMedia(DARK_QUERY).matches ? 'dark' : 'light'
 }
 
+// Mirrored by the inline script in index.html. Keep both in sync.
 export function resolveTheme(): Theme {
   return readStoredTheme() ?? systemTheme()
 }
