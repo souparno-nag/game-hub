@@ -97,7 +97,7 @@ Measured contrast (WCAG): ink on bg 17.1 / 16.2; muted on bg 7.5 / 9.3; on-fill 
 
 ### Classes (looks only)
 
-- `.btn` primary: coral fill, on-fill text, 2px outline, `--shadow-sm`, weight 600. `.btn--secondary`: surface fill, ink text. States: hover (slight shadow growth or none — builder's call, keep subtle), `:focus-visible` ring, `:active` pressed, `:disabled` 50% opacity and no shadow, `cursor: not-allowed`. Minimum target 40px tall.
+- `.btn` primary: coral fill, on-fill text, 2px outline, `--shadow-sm`, weight 600. `.btn--secondary`: surface fill, ink text. States: hover (slight shadow growth or none — builder's call, keep subtle), `:focus-visible` ring, `:active` pressed, `:disabled` surface fill with muted text and border, no shadow, `cursor: not-allowed` (changed from 50% opacity during Milestone 2 browser checks: faded coral read as a brown button on the dark page). Minimum target 40px tall.
 - `.panel`: surface fill, 3px outline, `--radius-lg`, `--shadow`, `--space-3` padding.
 
 ### Components (behaviour/accessibility)

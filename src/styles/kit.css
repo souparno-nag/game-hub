@@ -47,8 +47,11 @@
   box-shadow: 0 0 0 var(--color-line);
 }
 
+/* Neutral in both themes: a faded coral turns muddy brown on the dark page. */
 .btn:disabled {
-  opacity: 0.5;
+  color: var(--color-muted);
+  background-color: var(--color-surface);
+  border-color: var(--color-muted);
   box-shadow: none;
   cursor: not-allowed;
 }
