@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Tasks 1–7 of 9 done)
+**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Tasks 1–8 of 9 done)
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -107,7 +107,8 @@ _Last updated: 2026-11-04_
 - Task 5 done: `src/components/Field.tsx` (label, hint, error wired by `useId`; `aria-describedby` hint then error; `aria-invalid` on error; render-prop `children(control)`), plus `.input` class for text inputs.
 - Task 6 done: `src/components/ThemeToggle.tsx` (header button, `btn btn--secondary btn--sm`; click applies and stores the theme; follows the device setting until a choice is stored).
 - Task 7 done: responsive app shell (see Done); `App.test.tsx` also checks the header toggle, intro line and empty state.
+- Task 8 done: dev-only kit preview, `kit.html` + `src/dev/` (`kit-main.tsx`, `KitPreview.tsx`, `kit-preview.css`). `npm run dev`, open `/kit.html`. Not in `dist/`. Its theme script is a third copy of the one in `index.html`.
 
-**Next (Milestone 2):** Task 8, dev-only kit preview at `/kit.html`. Session handoff: `.agent/handoff-milestone-2.md`.
+**Next (Milestone 2):** Task 9, browser checks at 375px/1280px in both themes, fixes, final verification and review. Session handoff: `.agent/handoff-milestone-2.md`.
 
 **Milestones 2–10:** not started.

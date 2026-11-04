@@ -1,0 +1,51 @@
+/* Layout for the dev-only kit preview page. Not shipped. */
+
+.kit-section {
+  margin-top: var(--space-6);
+}
+
+.kit-section h2 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-lg);
+  font-weight: 800;
+}
+
+.kit-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.kit-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.kit-stack {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.kit-form {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.kit-form .field {
+  justify-self: stretch;
+}
+
+.kit-panel-title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-lg);
+  font-weight: 800;
+}
+
+@media (min-width: 768px) {
+  .kit-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
