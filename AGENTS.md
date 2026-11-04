@@ -54,6 +54,20 @@ Recent history uses short, imperative summaries such as `clean the repo` and `ad
 
 Pull requests should include a clear description, tests run, linked issue or task when available, screenshots for UI changes, and notes for Supabase schema or environment changes.
 
+## Skills
+
+Project skills live in `.agents/skills/` (installed via `skills-lock.json`) and `.agent/skills/swiss-design/`; each is symlinked into `.claude/skills/` so it is discovered automatically. When adding a skill, add its symlink there too.
+
+Use skills automatically, without being asked, whenever a task matches:
+
+- **Planning new work:** `brainstorming` before designing a feature or component; `writing-plans` before multi-step implementation; `executing-plans` to carry a plan out.
+- **Implementing:** `test-driven-development` for features and bug fixes; `systematic-debugging` for any bug or failing test.
+- **Finishing:** `verification-before-completion` before claiming anything works or committing; `requesting-code-review` after a milestone.
+- **UI work:** `swiss-design` and `frontend-design` as the baseline for every screen (matches the "crisp indie arcade" direction in `.agent/initial/design.md`).
+- **Browser checks:** `webapp-testing` or `agent-browser` to verify UI in a real browser and capture screenshots.
+
+The ~60 single-aesthetic skills (`sega`, `neobrutalism`, `glassmorphism`, `retro`, ...) conflict with each other and with the baseline, so use one only when the user names it or a chosen visual direction is recorded in Project State. `handoff` and `review-animations` are user-invoked only (`/handoff`, `/review-animations`).
+
 ## Security & Configuration Tips
 
 Never commit Supabase secrets or `.env.local`. Use the anon key only through `VITE_SUPABASE_ANON_KEY`, enforce row-level security for profiles and scores, and validate score ranges before submitting leaderboard entries.
@@ -76,6 +90,7 @@ _Last updated: 2026-11-04_
 - Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Minimal base styles (light/dark) in `src/styles/global.css`; full theme tokens are Milestone 2.
 - Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
+- Skills: 90 project skills discoverable via `.claude/skills/` symlinks; auto-use rules in **Skills** above. No visual-style skill chosen yet beyond the `swiss-design` baseline.
 - `README.md` covers setup, env vars, scripts, and structure. Node 22.12+ required (Vitest 5).
 - Agent skills vendored in `.agents/skills/` (pinned in `skills-lock.json`, symlinked into `.claude/skills/`): `find-skills` (vercel-labs/skills), `handoff` (mattpocock/skills), `frontend-design` (anthropics/skills), `agent-browser` (vercel-labs/agent-browser), `review-animations` (emilkowalski/skills), `webapp-testing` (anthropics/skills), `design-taste-frontend` (leonxlnx/taste-skill), the obra/superpowers set, and 67 design-style skills from bergside/awesome-design-skills (e.g. `pacman`, `tetris`, `sega`, `neon`).
 
