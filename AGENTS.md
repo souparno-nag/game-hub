@@ -66,17 +66,16 @@ _Last updated: 2026-11-04_
 **Done**
 - Vite 8 + React 19 + TypeScript 6 scaffold; deps installed.
 - Scripts: `dev`, `build` (`tsc -b && vite build`), `preview`, `lint`. `npm run build` and `npm run lint` pass.
-- Scaffold committed; `AGENTS.md` is tracked (`.agent/` remains git-ignored).
+- Scaffold committed; `AGENTS.md` and `.agent/` are tracked.
+- Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
 
 **Remaining for Milestone 1**
-- Create base folders: `src/app`, `src/components`, `src/games`, `src/lib`, `src/pages`, `src/styles`; move `App.tsx` → `src/app/`, `index.css` → `src/styles/`.
 - Replace the placeholder `App.tsx` with a basic arcade shell.
 - Configure a test runner (Vitest); `npm test` is currently an echo placeholder.
 - Replace the Vite template `README.md` with project docs, including env setup.
 
-**Known issues**
-- `.gitignore` ignores `.agent/`, so the requirements/design/milestone plan isn't versioned (may be intentional).
+**Known issues:** none.
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
 
