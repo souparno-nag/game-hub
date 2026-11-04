@@ -67,11 +67,11 @@ _Last updated: 2026-11-04_
 - Vite 8 + React 19 + TypeScript 6 scaffold; deps installed.
 - Scripts: `dev`, `build` (`tsc -b && vite build`), `preview`, `lint`. `npm run build` and `npm run lint` pass.
 - Scaffold committed; `AGENTS.md` and `.agent/` are tracked.
+- Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Minimal base styles (light/dark) in `src/styles/global.css`; full theme tokens are Milestone 2.
 - Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
 
 **Remaining for Milestone 1**
-- Replace the placeholder `App.tsx` with a basic arcade shell.
 - Configure a test runner (Vitest); `npm test` is currently an echo placeholder.
 - Replace the Vite template `README.md` with project docs, including env setup.
 
