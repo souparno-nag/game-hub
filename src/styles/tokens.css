@@ -1,0 +1,74 @@
+/*
+ * Design tokens: Coral & Mint (neobrutalism).
+ * Values come from .agent/specs/2026-11-04-milestone-2-design.md.
+ * Light is the default; the inline script in index.html sets data-theme
+ * on <html> before first paint.
+ */
+
+:root {
+  /* Type */
+  --font-body: 'Rubik Variable', system-ui, sans-serif;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+
+  /* Space (8px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+
+  /* Shape */
+  --radius-lg: 12px;
+  --radius-sm: 8px;
+  --border: 2px;
+  --border-thick: 3px;
+}
+
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --color-bg: #fff6ee;
+  --color-surface: #ffffff;
+  --color-ink: #1a1410;
+  --color-muted: #5a4e46;
+  --color-line: #1a1410;
+  --color-accent: #ff6b4a;
+  --color-accent-2: #3ddc97;
+  --color-on-fill: #1a1410;
+  --color-focus: #1f6feb;
+  --color-info: #8ec5ff;
+  --color-success: #3ddc97;
+  --color-warning: #ffc845;
+  --color-danger: #f2555a;
+
+  /* Hard shadows (no blur); they follow the theme's line colour. */
+  --shadow-sm: 3px 3px 0 var(--color-line);
+  --shadow: 5px 5px 0 var(--color-line);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-bg: #1b1614;
+  --color-surface: #28201c;
+  --color-ink: #fff1e6;
+  --color-muted: #c9b8ac;
+  --color-line: #fff1e6;
+  --color-accent: #ff7a5c;
+  --color-accent-2: #4be3a3;
+  --color-on-fill: #1a1410;
+  --color-focus: #7fb4ff;
+  --color-info: #7fb4ff;
+  --color-success: #4be3a3;
+  --color-warning: #ffd166;
+  --color-danger: #ff6b70;
+
+  --shadow-sm: 3px 3px 0 var(--color-line);
+  --shadow: 5px 5px 0 var(--color-line);
+}

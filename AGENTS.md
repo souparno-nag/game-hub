@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Task 1 of 9 done)
+**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Tasks 1–2 of 9 done)
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -87,7 +87,7 @@ _Last updated: 2026-11-04_
 - Scripts: `dev`, `build` (`tsc -b && vite build`), `preview`, `lint`, `test` (`vitest run`), `test:watch`. Build, lint, and tests pass.
 - Vitest 5 configured in `vite.config.ts` (jsdom, setup in `src/test/setup.ts`); smoke test in `src/app/App.test.tsx`.
 - Scaffold committed; `AGENTS.md` and `.agent/` are tracked.
-- Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Minimal base styles (light/dark) in `src/styles/global.css`; full theme tokens are Milestone 2.
+- Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Its old `.app-*` styles were removed in Milestone 2 Task 2; it is unstyled beyond base styles until Task 7.
 - Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
 - Skills: 90 project skills discoverable via `.claude/skills/` symlinks; auto-use rules in **Skills** above. Approved aesthetic: `neobrutalism`, Coral & Mint direction (warm surfaces, coral/mint fills, thick outlines, hard shadows, Rubik), applied to all app UI on top of the `swiss-design` baseline. Light and dark themes, device default plus header toggle.
@@ -101,7 +101,8 @@ _Last updated: 2026-11-04_
 
 **Milestone 2 progress** (plan: `.agent/plans/2026-11-04-milestone-2-plan.md`, design: `.agent/specs/2026-11-04-milestone-2-design.md`)
 - Task 1 done: theme helpers in `src/lib/theme.ts` (stored choice under `game-hub:theme`, device setting, apply to `<html data-theme>`), tested; test helper `mockMatchMedia` in `src/test/matchMedia.ts` (jsdom has no `matchMedia`).
+- Task 2 done: styles split into `src/styles/tokens.css` (Coral & Mint tokens, light default, `[data-theme='dark']`), `base.css` (minimal globals inside `:where()`, focus ring, `.visually-hidden`), `kit.css` (`.btn`, `.btn--secondary`, `.btn--sm`, `.panel`); `global.css` only imports them. Rubik via `@fontsource-variable/rubik`, imported in `src/main.tsx`.
 
-**Next (Milestone 2):** Task 2, tokens, base styles, kit classes, Rubik font. Session handoff: `.agent/handoff-milestone-2.md`.
+**Next (Milestone 2):** Task 3, no-flash theme script in `index.html`. Session handoff: `.agent/handoff-milestone-2.md`.
 
 **Milestones 2–10:** not started.
