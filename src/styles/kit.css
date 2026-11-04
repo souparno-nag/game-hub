@@ -122,3 +122,59 @@
 .status--error .status__badge {
   background-color: var(--color-danger);
 }
+
+/* Form field (Field component) and text input */
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.field__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.field__hint,
+.field__error {
+  margin: 0;
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.field__hint {
+  color: var(--color-muted);
+}
+
+/* Text stays ink; the glyph and the input border carry the danger colour. */
+.field__error {
+  display: flex;
+  gap: var(--space-1);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.field__error > [aria-hidden='true'] {
+  color: var(--color-danger);
+  font-weight: 800;
+}
+
+.input {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+  border: var(--border) solid var(--color-line);
+  border-radius: var(--radius-sm);
+}
+
+.input::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
