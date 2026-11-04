@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 2 — Visual And Layout Foundation (design approved, plan next)
+**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Task 1 of 9 done)
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -99,6 +99,9 @@ _Last updated: 2026-11-04_
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
 
-**Next (Milestone 2):** design approved in `.agent/specs/2026-11-04-milestone-2-design.md`; implementation plan in `.agent/plans/`. Session handoff: `.agent/handoff-milestone-2.md`.
+**Milestone 2 progress** (plan: `.agent/plans/2026-11-04-milestone-2-plan.md`, design: `.agent/specs/2026-11-04-milestone-2-design.md`)
+- Task 1 done: theme helpers in `src/lib/theme.ts` (stored choice under `game-hub:theme`, device setting, apply to `<html data-theme>`), tested; test helper `mockMatchMedia` in `src/test/matchMedia.ts` (jsdom has no `matchMedia`).
+
+**Next (Milestone 2):** Task 2, tokens, base styles, kit classes, Rubik font. Session handoff: `.agent/handoff-milestone-2.md`.
 
 **Milestones 2–10:** not started.
