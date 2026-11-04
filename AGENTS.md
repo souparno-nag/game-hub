@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Tasks 1–6 of 9 done)
+**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Tasks 1–7 of 9 done)
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -87,7 +87,7 @@ _Last updated: 2026-11-04_
 - Scripts: `dev`, `build` (`tsc -b && vite build`), `preview`, `lint`, `test` (`vitest run`), `test:watch`. Build, lint, and tests pass.
 - Vitest 5 configured in `vite.config.ts` (jsdom, setup in `src/test/setup.ts`); smoke test in `src/app/App.test.tsx`.
 - Scaffold committed; `AGENTS.md` and `.agent/` are tracked.
-- Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Its old `.app-*` styles were removed in Milestone 2 Task 2; it is unstyled beyond base styles until Task 7.
+- Arcade shell in `src/app/App.tsx`: full-width header (coral brand link, theme toggle, sign-in slot comment for Milestone 7) and main, each with an inner `.app-container` (1120px column); "Arcade" heading, intro line, info `StatusMessage` empty state. Shell styles at the end of `kit.css`.
 - Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
 - Skills: 90 project skills discoverable via `.claude/skills/` symlinks; auto-use rules in **Skills** above. Approved aesthetic: `neobrutalism`, Coral & Mint direction (warm surfaces, coral/mint fills, thick outlines, hard shadows, Rubik), applied to all app UI on top of the `swiss-design` baseline. Light and dark themes, device default plus header toggle.
@@ -106,7 +106,8 @@ _Last updated: 2026-11-04_
 - Task 4 done: `src/components/StatusMessage.tsx` (`tone`: info/success/warning/error; `role="alert"` for error, `status` otherwise; hidden glyph plus a spoken tone word), styles in `kit.css`.
 - Task 5 done: `src/components/Field.tsx` (label, hint, error wired by `useId`; `aria-describedby` hint then error; `aria-invalid` on error; render-prop `children(control)`), plus `.input` class for text inputs.
 - Task 6 done: `src/components/ThemeToggle.tsx` (header button, `btn btn--secondary btn--sm`; click applies and stores the theme; follows the device setting until a choice is stored).
+- Task 7 done: responsive app shell (see Done); `App.test.tsx` also checks the header toggle, intro line and empty state.
 
-**Next (Milestone 2):** Task 7, responsive app shell in `App.tsx`. Session handoff: `.agent/handoff-milestone-2.md`.
+**Next (Milestone 2):** Task 8, dev-only kit preview at `/kit.html`. Session handoff: `.agent/handoff-milestone-2.md`.
 
 **Milestones 2–10:** not started.

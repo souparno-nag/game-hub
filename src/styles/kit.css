@@ -178,3 +178,66 @@
 .input[aria-invalid='true'] {
   border-color: var(--color-danger);
 }
+
+/* App shell. Header and main span the viewport; .app-container holds the
+   1120px content column inside each. */
+
+.app-container {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+
+.app-header {
+  background-color: var(--color-surface);
+  border-bottom: var(--border-thick) solid var(--color-line);
+}
+
+.app-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 64px;
+  padding-block: var(--space-2);
+}
+
+.app-brand {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--color-on-fill);
+  text-decoration: none;
+  background-color: var(--color-accent);
+  border: var(--border) solid var(--color-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.app-main {
+  padding-block: var(--space-5) var(--space-6);
+}
+
+.app-intro {
+  max-width: 65ch;
+  margin: 0 0 var(--space-4);
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    padding-inline: var(--space-5);
+  }
+
+  .app-main {
+    padding-top: var(--space-6);
+  }
+}
