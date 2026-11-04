@@ -13,6 +13,12 @@
       "skillPath": "skills/brainstorming/SKILL.md",
       "computedHash": "b344a85378eb5e5da192bceb0f9c0c15a4820a3ee8b5ad867e3a70ef3c691e3d"
     },
+    "design-taste-frontend": {
+      "source": "leonxlnx/taste-skill",
+      "sourceType": "github",
+      "skillPath": "skills/taste-skill/SKILL.md",
+      "computedHash": "6ac8ba6089dcbc303744a507a4587113c5d845ca2f658b3ce2b0b5eab108fb0d"
+    },
     "diagnosing-superpowers": {
       "source": "obra/superpowers",
       "sourceType": "github",
