@@ -29,6 +29,14 @@ describe('ThemeToggle', () => {
     expect(screen.getByRole('button', { name: 'Switch to light theme' }).textContent).toContain('Light')
   })
 
+  it('asks for the text form of the sun glyph so phones do not swap in a colour emoji', () => {
+    document.documentElement.dataset.theme = 'dark'
+    render(<ThemeToggle />)
+
+    const glyph = screen.getByRole('button').querySelector('[aria-hidden="true"]')
+    expect(glyph?.textContent).toBe('☀︎')
+  })
+
   it('switches the theme and remembers the choice', () => {
     document.documentElement.dataset.theme = 'light'
     render(<ThemeToggle />)

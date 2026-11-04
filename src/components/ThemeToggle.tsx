@@ -45,7 +45,8 @@ export function ThemeToggle() {
       aria-label={`Switch to ${next} theme`}
       onClick={toggle}
     >
-      <span aria-hidden="true">{next === 'dark' ? '☾' : '☀'}</span>
+      {/* U+FE0E asks for the text glyph; some phones draw a bare ☀ as a colour emoji. */}
+      <span aria-hidden="true">{next === 'dark' ? '☾' : '☀︎'}</span>
       {next === 'dark' ? 'Dark' : 'Light'}
     </button>
   )
