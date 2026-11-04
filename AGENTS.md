@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 2 — Visual And Layout Foundation (not started)
+**Current milestone:** 2 — Visual And Layout Foundation (design drafted, awaiting approval)
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -90,7 +90,7 @@ _Last updated: 2026-11-04_
 - Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Minimal base styles (light/dark) in `src/styles/global.css`; full theme tokens are Milestone 2.
 - Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
-- Skills: 90 project skills discoverable via `.claude/skills/` symlinks; auto-use rules in **Skills** above. No aesthetic skill approved yet beyond the `swiss-design` baseline; propose one before starting Milestone 2.
+- Skills: 90 project skills discoverable via `.claude/skills/` symlinks; auto-use rules in **Skills** above. Approved aesthetic: `neobrutalism`, Coral & Mint direction (warm surfaces, coral/mint fills, thick outlines, hard shadows, Rubik), applied to all app UI on top of the `swiss-design` baseline. Light and dark themes, device default plus header toggle.
 - `README.md` covers setup, env vars, scripts, and structure. Node 22.12+ required (Vitest 5).
 - Agent skills vendored in `.agents/skills/` (pinned in `skills-lock.json`, symlinked into `.claude/skills/`): `find-skills` (vercel-labs/skills), `handoff` (mattpocock/skills), `frontend-design` (anthropics/skills), `agent-browser` (vercel-labs/agent-browser), `review-animations` (emilkowalski/skills), `webapp-testing` (anthropics/skills), `design-taste-frontend` (leonxlnx/taste-skill), the obra/superpowers set, and 67 design-style skills from bergside/awesome-design-skills (e.g. `pacman`, `tetris`, `sega`, `neon`).
 
@@ -99,6 +99,6 @@ _Last updated: 2026-11-04_
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
 
-**Next (Milestone 2):** theme tokens, responsive app shell, reusable button/panel/form/status styles. Session handoff: `.agent/handoff-milestone-2.md`.
+**Next (Milestone 2):** design in `.agent/specs/2026-11-04-milestone-2-design.md` (awaiting approval), then an implementation plan in `.agent/plans/`. Session handoff: `.agent/handoff-milestone-2.md`.
 
 **Milestones 2–10:** not started.
