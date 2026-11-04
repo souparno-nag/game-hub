@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 3 — Routing And Game Catalog (not started). Milestone 2 is complete on branch `milestone-2`, not yet merged into `main`.
+**Current milestone:** 3 — Routing And Game Catalog (not started). Milestone 2 is complete and merged into `main` (PR #1).
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -108,7 +108,7 @@ _Last updated: 2026-11-04_
 - Per-game themes: hub chrome uses the hub theme; each game owns its play area and scopes its styles to its own root (design doc, "Per-game themes").
 - Verified in Chrome at 375px and 1280px, both themes: no overflow, one-row header, visible focus rings, reduced motion respected, no theme flash in the production build.
 
-**Next:** decide whether to merge `milestone-2` into `main`, then Milestone 3 (router, catalog, `ArcadePage`, `GameCard`, `GamePage`). `.agent/handoff-milestone-2.md` is historical.
+**Next:** Milestone 3 (router, catalog, `ArcadePage`, `GameCard`, `GamePage`). Session handoff: `.agent/handoff-milestone-3.md`. `.agent/handoff-milestone-2.md` is historical.
 
 **Carried from the Milestone 2 review** (decide in the named milestone's plan)
 - Milestone 5: `applyTheme(theme, root)` sets `data-theme` on any element, but tokens only switch on `:root[data-theme]`. If a game needs its own fixed light/dark look, change the token selectors to `[data-theme='…']` (or drop the parameter).
