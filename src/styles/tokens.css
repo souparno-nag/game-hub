@@ -27,6 +27,12 @@
   --radius-sm: 8px;
   --border: 2px;
   --border-thick: 3px;
+
+  /* Hard shadow offsets (no blur). The colour is added where the shadow is
+     used, `var(--shadow-sm-offset) var(--color-line)`, so a game root that
+     overrides --color-line recolours shadows too. */
+  --shadow-sm-offset: 3px 3px 0;
+  --shadow-offset: 5px 5px 0;
 }
 
 :root,
@@ -46,10 +52,6 @@
   --color-success: #3ddc97;
   --color-warning: #ffc845;
   --color-danger: #f2555a;
-
-  /* Hard shadows (no blur); they follow the theme's line colour. */
-  --shadow-sm: 3px 3px 0 var(--color-line);
-  --shadow: 5px 5px 0 var(--color-line);
 }
 
 :root[data-theme='dark'] {
@@ -68,7 +70,4 @@
   --color-success: #4be3a3;
   --color-warning: #ffd166;
   --color-danger: #ff6b70;
-
-  --shadow-sm: 3px 3px 0 var(--color-line);
-  --shadow: 5px 5px 0 var(--color-line);
 }

@@ -82,7 +82,7 @@ Measured contrast (WCAG): ink on bg 17.1 / 16.2; muted on bg 7.5 / 9.3; on-fill 
 - Spacing on an 8px base: `--space-1` 4px, `--space-2` 8px, `--space-3` 16px, `--space-4` 24px, `--space-5` 32px, `--space-6` 48px.
 - Radii: `--radius-lg` 12px (panels, header brand block), `--radius-sm` 8px (buttons, inputs, badges).
 - Borders: `--border-thick` 3px (panels, header rule), `--border` 2px (controls).
-- Shadows (hard, no blur): `--shadow-sm` `3px 3px 0 var(--color-line)` (controls), `--shadow` `5px 5px 0 var(--color-line)` (panels).
+- Shadows (hard, no blur): offset tokens `--shadow-sm-offset` `3px 3px 0` (controls) and `--shadow-offset` `5px 5px 0` (panels), used as `box-shadow: var(--shadow-sm-offset) var(--color-line)`. The colour is added at the point of use so a game root that overrides `--color-line` recolours shadows too (changed after the Milestone 2 review: tokens with the colour baked in resolved once on `:root`).
 - Motion: button press only — translate by the shadow offset and drop the shadow, ~80ms. Disabled under `prefers-reduced-motion: reduce`.
 
 ## Shell
@@ -97,8 +97,8 @@ Measured contrast (WCAG): ink on bg 17.1 / 16.2; muted on bg 7.5 / 9.3; on-fill 
 
 ### Classes (looks only)
 
-- `.btn` primary: coral fill, on-fill text, 2px outline, `--shadow-sm`, weight 600. `.btn--secondary`: surface fill, ink text. States: hover (slight shadow growth or none — builder's call, keep subtle), `:focus-visible` ring, `:active` pressed, `:disabled` surface fill with muted text and border, no shadow, `cursor: not-allowed` (changed from 50% opacity during Milestone 2 browser checks: faded coral read as a brown button on the dark page). Minimum target 40px tall.
-- `.panel`: surface fill, 3px outline, `--radius-lg`, `--shadow`, `--space-3` padding.
+- `.btn` primary: coral fill, on-fill text, 2px outline, small shadow (`--shadow-sm-offset`), weight 600. `.btn--secondary`: surface fill, ink text. States: hover (slight shadow growth or none — builder's call, keep subtle), `:focus-visible` ring, `:active` pressed, `:disabled` surface fill with muted text and border, no shadow, `cursor: not-allowed` (changed from 50% opacity during Milestone 2 browser checks: faded coral read as a brown button on the dark page). Minimum target 40px tall.
+- `.panel`: surface fill, 3px outline, `--radius-lg`, panel shadow (`--shadow-offset`), `--space-3` padding.
 
 ### Components (behaviour/accessibility)
 
