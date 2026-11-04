@@ -66,7 +66,7 @@ Use skills automatically, without being asked, whenever a task matches:
 - **UI work:** `swiss-design` and `frontend-design` as the baseline for every screen (matches the "crisp indie arcade" direction in `.agent/initial/design.md`).
 - **Browser checks:** `webapp-testing` or `agent-browser` to verify UI in a real browser and capture screenshots.
 
-The ~60 single-aesthetic skills (`sega`, `neobrutalism`, `glassmorphism`, `retro`, ...) conflict with each other and with the baseline, so use one only when the user names it or a chosen visual direction is recorded in Project State. `handoff` and `review-animations` are user-invoked only (`/handoff`, `/review-animations`).
+The ~60 single-aesthetic skills (`sega`, `neobrutalism`, `glassmorphism`, `retro`, ...) conflict with each other and with the baseline. The agent judges which one fits each piece of UI work, but **consults the user first**: propose the skill (or a short list of 2–3), with a one-line reason each, and wait for approval before applying it. Record approved choices and where they apply in Project State so later work stays consistent. `handoff` and `review-animations` are user-invoked only (`/handoff`, `/review-animations`).
 
 ## Security & Configuration Tips
 
@@ -90,7 +90,7 @@ _Last updated: 2026-11-04_
 - Basic arcade shell in `src/app/App.tsx`: header with brand link, "Arcade" library heading, empty state. Minimal base styles (light/dark) in `src/styles/global.css`; full theme tokens are Milestone 2.
 - Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
-- Skills: 90 project skills discoverable via `.claude/skills/` symlinks; auto-use rules in **Skills** above. No visual-style skill chosen yet beyond the `swiss-design` baseline.
+- Skills: 90 project skills discoverable via `.claude/skills/` symlinks; auto-use rules in **Skills** above. No aesthetic skill approved yet beyond the `swiss-design` baseline; propose one before starting Milestone 2.
 - `README.md` covers setup, env vars, scripts, and structure. Node 22.12+ required (Vitest 5).
 - Agent skills vendored in `.agents/skills/` (pinned in `skills-lock.json`, symlinked into `.claude/skills/`): `find-skills` (vercel-labs/skills), `handoff` (mattpocock/skills), `frontend-design` (anthropics/skills), `agent-browser` (vercel-labs/agent-browser), `review-animations` (emilkowalski/skills), `webapp-testing` (anthropics/skills), `design-taste-frontend` (leonxlnx/taste-skill), the obra/superpowers set, and 67 design-style skills from bergside/awesome-design-skills (e.g. `pacman`, `tetris`, `sega`, `neon`).
 
