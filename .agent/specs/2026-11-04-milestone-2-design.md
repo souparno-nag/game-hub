@@ -1,0 +1,151 @@
+# Milestone 2 Design: Visual And Layout Foundation
+
+Status: approved · 2026-11-04
+
+## Intent
+
+Give Game Hub its look and a reusable visual kit before any real screens exist, so Milestones 3–8 (library, game pages, sign-in, leaderboards) build on shared tokens and pieces instead of styling one-off. The direction is "crisp indie arcade" (`.agent/initial/design.md` §8): game-forward, lively but restrained colour, readable, no marketing hero.
+
+## Decisions made with the user
+
+- **Aesthetic:** `neobrutalism` skill, in the **Coral & Mint** direction: warm off-white page, coral and mint fills, thick dark outlines, hard offset shadows, rounded corners, Rubik headings. Chosen for its warmth over the louder canonical yellow/violet and the quieter ink/blue options.
+- **Themes:** a real light theme **and** a real dark theme (not light-only).
+- **Theme choice:** follows the device setting by default; a toggle in the header overrides it and the choice is remembered.
+- **Build approach:** B — CSS variables and classes, plus small React components only where a piece carries behaviour or accessibility (see Approaches).
+- **Home page content** stays as today (heading, one line, empty state), restyled. The kit is not shown on the home page.
+
+## Goals
+
+- Theme tokens for colour, type, spacing, radii, borders, shadows, focus, in both themes.
+- Responsive app shell: header (brand, theme toggle, reserved slot for sign-in in Milestone 7) and a main content column.
+- Reusable kit: buttons (primary, secondary), panel, form field, status message (info, success, warning, error), theme toggle.
+- WCAG AA text contrast in both themes; visible keyboard focus on every interactive element.
+- Stable layout at 375px and desktop widths; no overlapping text; no theme flash on load.
+
+## Non-goals
+
+- Game cards, routing, catalog (Milestone 3). Cards seen in mockups were placeholders.
+- Sign-in UI (Milestone 7); only the header slot is reserved.
+- Favicon and app icons (left for Milestone 10 polish).
+- `npm audit` fixes.
+
+## Anti-goals (failure even if it works)
+
+- A marketing hero or promotional copy on the home page.
+- States told apart by colour alone.
+- Decoration that encodes nothing (gradients, glows, extra icons, motion on load).
+- A flash of the wrong theme on page load.
+- Copying a specific existing game's or brand's look.
+
+## Approaches considered
+
+| | Approach | Trade-off | Verdict |
+|---|---|---|---|
+| A | CSS variables + classes only; `ThemeToggle` the only component | Smallest change, but label/error wiring and screen-reader announcements get hand-written on every later screen | Rejected |
+| **B** | **CSS variables + classes, plus components where behaviour or accessibility lives: `ThemeToggle`, `Field`, `StatusMessage`** | **Accessibility is enforced once and tested; looks-only pieces (button, panel) stay as classes** | **Chosen** |
+| C | Every piece a typed component with CSS Modules | Most uniform, but designs component APIs for screens that don't exist yet; likely churn in M3–M8 | Rejected |
+| — | Tailwind | Extra dependency and a second styling system beside existing CSS | Ruled out |
+
+## Design tokens
+
+All tokens are CSS custom properties. Theme-dependent tokens are set under `:root[data-theme="light"]` and `:root[data-theme="dark"]`. Each theme also sets `color-scheme` so native controls and scrollbars match.
+
+### Colour
+
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `--color-bg` | `#FFF6EE` | `#1B1614` | Page background |
+| `--color-surface` | `#FFFFFF` | `#28201C` | Header, panels, inputs' container |
+| `--color-ink` | `#1A1410` | `#FFF1E6` | Body text |
+| `--color-muted` | `#5A4E46` | `#C9B8AC` | Secondary text, hints |
+| `--color-line` | `#1A1410` | `#FFF1E6` | Outlines and hard shadows |
+| `--color-accent` | `#FF6B4A` | `#FF7A5C` | Coral: primary buttons, brand block (fill only) |
+| `--color-accent-2` | `#3DDC97` | `#4BE3A3` | Mint: secondary fills |
+| `--color-on-fill` | `#1A1410` | `#1A1410` | Text on any coloured fill, both themes |
+| `--color-focus` | `#1F6FEB` | `#7FB4FF` | Focus ring |
+| `--color-info` | `#8EC5FF` | `#7FB4FF` | Info status badge |
+| `--color-success` | `#3DDC97` | `#4BE3A3` | Success status badge |
+| `--color-warning` | `#FFC845` | `#FFD166` | Warning status badge |
+| `--color-danger` | `#F2555A` | `#FF6B70` | Error status badge, invalid field border |
+
+Measured contrast (WCAG): ink on bg 17.1 / 16.2; muted on bg 7.5 / 9.3; on-fill text on coral 6.5 / 7.1, mint 10.3 / 11.1, info 10.1 / 8.6, warning 11.8 / 12.7, danger 5.4 / 6.6; focus ring vs page bg 4.3 / 8.4. Rule: **coral is never text on the light page** (2.6:1); it is a fill only. The focus ring must sit **outside** the element (`outline-offset` ≥ 2px) so it is measured against the page, not against coral.
+
+### Type
+
+- Family: Rubik, self-hosted via `@fontsource-variable/rubik` (no third-party request), fallback `system-ui, sans-serif`.
+- Weights: 400 body, 600 labels and buttons, 800 headings. (One more than the Swiss two-weight rule; the heavy heading weight is what makes the style read as neobrutalist.)
+- Scale: `--text-sm` 0.875rem, `--text-base` 1rem, `--text-lg` 1.25rem, `--text-xl` 1.5rem, `--text-2xl` 2rem (h1 on mobile), 2.5rem for h1 from 768px.
+- Body line-height 1.5, headings 1.1. Body measure capped at ~65ch where text runs long.
+
+### Space, shape, depth
+
+- Spacing on an 8px base: `--space-1` 4px, `--space-2` 8px, `--space-3` 16px, `--space-4` 24px, `--space-5` 32px, `--space-6` 48px.
+- Radii: `--radius-lg` 12px (panels, header brand block), `--radius-sm` 8px (buttons, inputs, badges).
+- Borders: `--border-thick` 3px (panels, header rule), `--border` 2px (controls).
+- Shadows (hard, no blur): offset tokens `--shadow-sm-offset` `3px 3px 0` (controls) and `--shadow-offset` `5px 5px 0` (panels), used as `box-shadow: var(--shadow-sm-offset) var(--color-line)`. The colour is added at the point of use so a game root that overrides `--color-line` recolours shadows too (changed after the Milestone 2 review: tokens with the colour baked in resolved once on `:root`).
+- Motion: button press only — translate by the shadow offset and drop the shadow, ~80ms. Disabled under `prefers-reduced-motion: reduce`.
+
+## Shell
+
+- Content column: max width 1120px, centred; side padding 16px, 32px from 768px.
+- Header: surface background, thick bottom rule. Left: "Game Hub" brand link styled as a coral block with outline and small shadow. Right: a group holding an empty slot for sign-in (Milestone 7; renders nothing now) and the `ThemeToggle`.
+- Main: h1 "Arcade", one muted line ("Pick a game. No account needed to play."), then the empty state as an info `StatusMessage` ("No games yet. Starter games are on the way.").
+- Mobile (<768px): single column; header keeps brand and toggle on one row.
+- Existing smoke test (brand link to `/`, h1 "Arcade") must keep passing.
+
+## Kit
+
+### Classes (looks only)
+
+- `.btn` primary: coral fill, on-fill text, 2px outline, small shadow (`--shadow-sm-offset`), weight 600. `.btn--secondary`: surface fill, ink text. States: hover (slight shadow growth or none — builder's call, keep subtle), `:focus-visible` ring, `:active` pressed, `:disabled` surface fill with muted text and border, no shadow, `cursor: not-allowed` (changed from 50% opacity during Milestone 2 browser checks: faded coral read as a brown button on the dark page). Minimum target 40px tall.
+- `.panel`: surface fill, 3px outline, `--radius-lg`, panel shadow (`--shadow-offset`), `--space-3` padding.
+
+### Components (behaviour/accessibility)
+
+- **`ThemeToggle`** (`src/components/ThemeToggle.tsx`): a `<button>` showing the theme it switches to ("Dark" / "Light" with a ☾/☀ glyph marked `aria-hidden`), accessible name "Switch to dark theme" / "Switch to light theme". Click sets `data-theme` on `<html>` and stores the choice. While no choice is stored, it follows live changes to the device setting. Once a choice is stored there is no "back to system" option in v1 (designer's call: two states keep the button simple; clearing site data resets it).
+- **`Field`** (`src/components/Field.tsx`): renders label, control, hint and error. Requirements: label linked to the control (`useId`); hint and error linked via `aria-describedby`; `aria-invalid` set when there is an error; error text shown with a × glyph and never by border colour alone. API shape is the builder's call (a render prop handing the control its `id`/`aria-*` props is suggested).
+- **`StatusMessage`** (`src/components/StatusMessage.tsx`): `tone` of `info | success | warning | error`; badge glyph per tone (i, ✓, !, ×) with `aria-hidden`, plus a visually hidden tone word ("Error:") so meaning survives without colour or glyph. `role="alert"` for error, `role="status"` otherwise.
+
+### Theme logic
+
+- `src/lib/theme.ts`: pure helpers — read stored choice (storage key `game-hub:theme`, values `light`/`dark`), resolve effective theme (stored, else `prefers-color-scheme`), apply to `<html>`. All storage access wrapped in try/catch (private mode).
+- No-flash: a small inline script in `index.html` `<head>` runs the same resolve-and-apply before first paint. It duplicates the resolve logic (it cannot import modules); a comment in both places points at the other.
+
+## Per-game themes
+
+Individual games can and will have their own look. The split:
+
+- **Hub chrome** (header, page layout, `GameShell` from Milestone 4, sign-in, leaderboards, kit pieces) always uses the hub theme, so navigation feels the same everywhere.
+- **The play area** inside the shell belongs to the game: its own colours, type and art.
+
+Rules that keep this possible:
+
+1. Global base styles stay minimal: box sizing, page background, body font and colour, focus ring. No element-wide styling of `button`, `input`, `h2`, etc.; kit looks are opt-in classes (`.btn`, `.panel`) and components.
+2. Game styles are scoped to the game's own root element (class or CSS Module), never global.
+3. Games may read hub tokens, override them inside their root (custom properties cascade), or ignore them.
+4. Games meet the same bar as the hub: WCAG AA contrast and visible keyboard focus.
+
+Open, decided per game in Milestone 5: whether a game follows the hub's light/dark theme or keeps a fixed look.
+
+## Files
+
+- `src/styles/tokens.css` (tokens, both themes), `src/styles/base.css` (reset, typography, focus), `src/styles/kit.css` (`.btn`, `.panel`, field, status, toggle, shell), with `src/styles/global.css` as the single entry importing them. Builder may merge files if one ends up trivial.
+- `src/components/ThemeToggle.tsx`, `Field.tsx`, `StatusMessage.tsx`, each with a colocated `*.test.tsx`.
+- `src/lib/theme.ts` with `theme.test.ts`.
+- `src/app/App.tsx` updated for the shell.
+- `index.html`: inline theme script.
+- Dev-only kit preview: `kit.html` at the repo root plus `src/dev/KitPreview.tsx`, rendering every kit piece in both states. Vite's dev server serves it at `/kit.html`; the production build only includes `index.html`, so it never ships (verify `dist/` has no `kit.html`).
+- New dependency: `@fontsource-variable/rubik`.
+
+## Testing and verification
+
+- TDD for `theme.ts`, `ThemeToggle`, `Field`, `StatusMessage` (Vitest + Testing Library): resolve order, storage failure fallback, toggle flips `data-theme` and persists, label/hint/error wiring and `aria-invalid`, status roles and hidden tone word.
+- `npm run build`, `npm run lint`, `npm test` pass before each commit.
+- Browser check (`webapp-testing` / `agent-browser`): screenshots of `/` and `/kit.html` at 375px and 1280px, in both themes; tab through every control to confirm visible focus; reload after toggling to confirm no flash and that the choice persists; check reduced motion.
+- `design-taste-frontend` app-screen review of the screenshots as a cross-check.
+
+## Left to the builder
+
+- Hover treatment details, exact focus `outline-offset` (≥ 2px), and whether `tokens/base/kit` stay as three files.
+- `Field` API shape, within the accessibility requirements above.
+- Fine-tuning any colour, provided every pair in the contrast list stays at or above WCAG AA (4.5:1 text, 3:1 non-text).

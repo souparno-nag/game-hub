@@ -1,0 +1,29 @@
+<!doctype html>
+<!-- Dev-only kit preview. Served by `npm run dev` at /kit.html; the
+     production build only includes index.html. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Hub kit</title>
+    <script>
+      // Copy of the theme script in index.html (which mirrors resolveTheme()
+      // in src/lib/theme.ts). Keep all three in sync.
+      (function () {
+        var theme = null
+        try {
+          var stored = window.localStorage.getItem('game-hub:theme')
+          if (stored === 'light' || stored === 'dark') theme = stored
+        } catch (e) {}
+        if (!theme) {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        }
+        document.documentElement.dataset.theme = theme
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/dev/kit-main.tsx"></script>
+  </body>
+</html>

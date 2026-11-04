@@ -34,6 +34,8 @@ Set these in `.env.local` for local development, and in Vercel project settings 
 | `npm test` | Run the test suite once. |
 | `npm run test:watch` | Run tests in watch mode. |
 
+Kit preview: `npm run dev`, then open `/kit.html`. Dev only; not in the production build.
+
 ## Project Structure
 
 ```text

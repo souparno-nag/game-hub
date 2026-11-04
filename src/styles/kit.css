@@ -1,0 +1,249 @@
+/* Reusable kit: opt-in classes. Components add their own rules below. */
+
+/* Buttons */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-on-fill);
+  text-decoration: none;
+  background-color: var(--color-accent);
+  border: var(--border) solid var(--color-line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm-offset) var(--color-line);
+  cursor: pointer;
+  transition:
+    transform 80ms ease-out,
+    box-shadow 80ms ease-out;
+}
+
+.btn--secondary {
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+}
+
+/* Smaller text and padding; keeps the 40px minimum target from .btn. */
+.btn--sm {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+}
+
+/* Only where hover is real; on touch screens a tap would leave it stuck. */
+@media (hover: hover) {
+  .btn:hover:not(:disabled) {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--color-line);
+  }
+}
+
+/* Pressed: sink by --shadow-sm-offset (3px) into the shadow. */
+.btn:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--color-line);
+}
+
+/* Neutral in both themes: a faded coral turns muddy brown on the dark page. */
+.btn:disabled {
+  color: var(--color-muted);
+  background-color: var(--color-surface);
+  border-color: var(--color-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+
+  .btn:hover:not(:disabled),
+  .btn:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* Panel */
+
+.panel {
+  padding: var(--space-3);
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+  border: var(--border-thick) solid var(--color-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-offset) var(--color-line);
+}
+
+/* Status message (StatusMessage component) */
+
+.status {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+  background-color: var(--color-surface);
+  border: var(--border) solid var(--color-line);
+  border-radius: var(--radius-sm);
+}
+
+.status__badge {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-on-fill);
+  border: var(--border) solid var(--color-line);
+  border-radius: var(--radius-sm);
+}
+
+.status__text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.status--info .status__badge {
+  background-color: var(--color-info);
+}
+
+.status--success .status__badge {
+  background-color: var(--color-success);
+}
+
+.status--warning .status__badge {
+  background-color: var(--color-warning);
+}
+
+.status--error .status__badge {
+  background-color: var(--color-danger);
+}
+
+/* Form field (Field component) and text input */
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.field__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.field__hint,
+.field__error {
+  margin: 0;
+  font-size: var(--text-sm);
+  overflow-wrap: anywhere;
+}
+
+.field__hint {
+  color: var(--color-muted);
+}
+
+/* Text stays ink; the glyph and the input border carry the danger colour. */
+.field__error {
+  display: flex;
+  gap: var(--space-1);
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.field__error > [aria-hidden='true'] {
+  color: var(--color-danger);
+  font-weight: 800;
+}
+
+.input {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  color: var(--color-ink);
+  background-color: var(--color-bg);
+  border: var(--border) solid var(--color-line);
+  border-radius: var(--radius-sm);
+}
+
+.input::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+/* App shell. Header and main span the viewport; .app-container holds the
+   1120px content column inside each. */
+
+.app-container {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+
+.app-header {
+  background-color: var(--color-surface);
+  border-bottom: var(--border-thick) solid var(--color-line);
+}
+
+.app-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: 64px;
+  padding-block: var(--space-2);
+}
+
+.app-brand {
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 800;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--color-on-fill);
+  text-decoration: none;
+  background-color: var(--color-accent);
+  border: var(--border) solid var(--color-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm-offset) var(--color-line);
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.app-main {
+  padding-block: var(--space-5) var(--space-6);
+}
+
+.app-intro {
+  max-width: 65ch;
+  margin: 0 0 var(--space-4);
+  color: var(--color-muted);
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    padding-inline: var(--space-5);
+  }
+
+  .app-main {
+    padding-top: var(--space-6);
+  }
+}
