@@ -110,4 +110,9 @@ _Last updated: 2026-11-04_
 
 **Next:** decide whether to merge `milestone-2` into `main`, then Milestone 3 (router, catalog, `ArcadePage`, `GameCard`, `GamePage`). `.agent/handoff-milestone-2.md` is historical.
 
-**Milestones 2–10:** not started.
+**Carried from the Milestone 2 review** (decide in the named milestone's plan)
+- Milestone 5: `applyTheme(theme, root)` sets `data-theme` on any element, but tokens only switch on `:root[data-theme]`. If a game needs its own fixed light/dark look, change the token selectors to `[data-theme='…']` (or drop the parameter).
+- Milestone 6: `StatusMessage` uses `role="status"`; a status inserted already holding its text may not be announced. Use a persistent live region whose text changes for submit results.
+- Minor, deferred: `.input` has no disabled style; a theme choice can be undone by a device switch when storage is blocked; no cross-tab theme sync; header markup duplicated in `KitPreview` (extract `AppHeader` with the Milestone 3 layout); `kit.html`'s theme-script copy untested; `src/dev/` missing from the README structure list.
+
+**Milestones 3–10:** not started.
