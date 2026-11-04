@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Tasks 1–3 of 9 done)
+**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Tasks 1–4 of 9 done)
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -103,7 +103,8 @@ _Last updated: 2026-11-04_
 - Task 1 done: theme helpers in `src/lib/theme.ts` (stored choice under `game-hub:theme`, device setting, apply to `<html data-theme>`), tested; test helper `mockMatchMedia` in `src/test/matchMedia.ts` (jsdom has no `matchMedia`).
 - Task 2 done: styles split into `src/styles/tokens.css` (Coral & Mint tokens, light default, `[data-theme='dark']`), `base.css` (minimal globals inside `:where()`, focus ring, `.visually-hidden`), `kit.css` (`.btn`, `.btn--secondary`, `.btn--sm`, `.panel`); `global.css` only imports them. Rubik via `@fontsource-variable/rubik`, imported in `src/main.tsx`.
 - Task 3 done: inline script in `index.html` `<head>` sets `data-theme` before first paint; it mirrors `resolveTheme()` (keep both in sync). `src/lib/themeScript.test.ts` runs the real script from `index.html`.
+- Task 4 done: `src/components/StatusMessage.tsx` (`tone`: info/success/warning/error; `role="alert"` for error, `status` otherwise; hidden glyph plus a spoken tone word), styles in `kit.css`.
 
-**Next (Milestone 2):** Task 4, `StatusMessage` component. Session handoff: `.agent/handoff-milestone-2.md`.
+**Next (Milestone 2):** Task 5, `Field` component. Session handoff: `.agent/handoff-milestone-2.md`.
 
 **Milestones 2–10:** not started.
