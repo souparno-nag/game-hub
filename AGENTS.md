@@ -78,7 +78,7 @@ Keep this section current: update it in the same commit as each change (mileston
 
 _Last updated: 2026-11-04_
 
-**Current milestone:** 2 — Visual And Layout Foundation (in progress on branch `milestone-2`; Tasks 1–8 of 9 done)
+**Current milestone:** 3 — Routing And Game Catalog (not started). Milestone 2 is complete on branch `milestone-2`, not yet merged into `main`.
 
 **Milestone 1 — Project Scaffold:** complete.
 
@@ -88,27 +88,26 @@ _Last updated: 2026-11-04_
 - Vitest 5 configured in `vite.config.ts` (jsdom, setup in `src/test/setup.ts`); smoke test in `src/app/App.test.tsx`.
 - Scaffold committed; `AGENTS.md` and `.agent/` are tracked.
 - Arcade shell in `src/app/App.tsx`: full-width header (coral brand link, theme toggle, sign-in slot comment for Milestone 7) and main, each with an inner `.app-container` (1120px column); "Arcade" heading, intro line, info `StatusMessage` empty state. Shell styles at the end of `kit.css`.
-- Base folders exist: `src/app` (`App.tsx`), `src/styles` (`global.css`), plus `src/components`, `src/games`, `src/lib`, `src/pages` (empty, held by `.gitkeep`).
+- Base folders exist: `src/app`, `src/styles`, `src/components`, `src/lib`, `src/dev`, plus `src/games` and `src/pages` (still empty, held by `.gitkeep`).
 - `.env.example` documents `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY`; `.env.local` is ignored via `*.local`.
 - Skills: 90 project skills discoverable via `.claude/skills/` symlinks; auto-use rules in **Skills** above. Approved aesthetic: `neobrutalism`, Coral & Mint direction (warm surfaces, coral/mint fills, thick outlines, hard shadows, Rubik), applied to all app UI on top of the `swiss-design` baseline. Light and dark themes, device default plus header toggle.
 - `README.md` covers setup, env vars, scripts, and structure. Node 22.12+ required (Vitest 5).
 - Agent skills vendored in `.agents/skills/` (pinned in `skills-lock.json`, symlinked into `.claude/skills/`): `find-skills` (vercel-labs/skills), `handoff` (mattpocock/skills), `frontend-design` (anthropics/skills), `agent-browser` (vercel-labs/agent-browser), `review-animations` (emilkowalski/skills), `webapp-testing` (anthropics/skills), `design-taste-frontend` (leonxlnx/taste-skill), the obra/superpowers set, and 67 design-style skills from bergside/awesome-design-skills (e.g. `pacman`, `tetris`, `sega`, `neon`).
 
 **Known issues**
+- The theme script exists in three places that must stay in sync: `index.html`, `kit.html`, and `resolveTheme()` in `src/lib/theme.ts` (only `index.html`'s copy is tested against it).
 - `npm audit` reports 17 advisories (12 moderate, 5 high), mostly in Vite's dev server and transitive dev deps; `npm audit fix` not yet run.
 
 **Upcoming dependencies:** a router (Milestone 3), `@supabase/supabase-js` (Milestone 6).
 
-**Milestone 2 progress** (plan: `.agent/plans/2026-11-04-milestone-2-plan.md`, design: `.agent/specs/2026-11-04-milestone-2-design.md`)
-- Task 1 done: theme helpers in `src/lib/theme.ts` (stored choice under `game-hub:theme`, device setting, apply to `<html data-theme>`), tested; test helper `mockMatchMedia` in `src/test/matchMedia.ts` (jsdom has no `matchMedia`).
-- Task 2 done: styles split into `src/styles/tokens.css` (Coral & Mint tokens, light default, `[data-theme='dark']`), `base.css` (minimal globals inside `:where()`, focus ring, `.visually-hidden`), `kit.css` (`.btn`, `.btn--secondary`, `.btn--sm`, `.panel`; disabled buttons are neutral surface/muted in both themes); `global.css` only imports them. Rubik via `@fontsource-variable/rubik`, imported in `src/main.tsx`.
-- Task 3 done: inline script in `index.html` `<head>` sets `data-theme` before first paint; it mirrors `resolveTheme()` (keep both in sync). `src/lib/themeScript.test.ts` runs the real script from `index.html`.
-- Task 4 done: `src/components/StatusMessage.tsx` (`tone`: info/success/warning/error; `role="alert"` for error, `status` otherwise; hidden glyph plus a spoken tone word), styles in `kit.css`.
-- Task 5 done: `src/components/Field.tsx` (label, hint, error wired by `useId`; `aria-describedby` hint then error; `aria-invalid` on error; render-prop `children(control)`), plus `.input` class for text inputs.
-- Task 6 done: `src/components/ThemeToggle.tsx` (header button, `btn btn--secondary btn--sm`; click applies and stores the theme; follows the device setting until a choice is stored).
-- Task 7 done: responsive app shell (see Done); `App.test.tsx` also checks the header toggle, intro line and empty state.
-- Task 8 done: dev-only kit preview, `kit.html` + `src/dev/` (`kit-main.tsx`, `KitPreview.tsx`, `kit-preview.css`). `npm run dev`, open `/kit.html`. Not in `dist/`. Its theme script is a third copy of the one in `index.html`.
+**Milestone 2 — Visual And Layout Foundation:** complete (design `.agent/specs/2026-11-04-milestone-2-design.md`, plan `.agent/plans/2026-11-04-milestone-2-plan.md`).
+- Tokens in `src/styles/tokens.css` (Coral & Mint; light default, `:root[data-theme='dark']`); minimal globals in `base.css` (inside `:where()`, focus ring, `.visually-hidden`); kit classes in `kit.css` (`.btn`, `.btn--secondary`, `.btn--sm`, `.panel`, `.input`, status, field, shell). `global.css` only imports them. Rubik via `@fontsource-variable/rubik`.
+- Theme: `src/lib/theme.ts` (storage key `game-hub:theme`, stored choice over device setting); an inline script in `index.html` sets `data-theme` before first paint; `ThemeToggle` in the header follows the device until a choice is stored.
+- Components: `StatusMessage` (tone glyph + spoken word; `alert` for errors), `Field` (label/hint/error wiring via render prop), `ThemeToggle`. All tested (45 tests total).
+- Dev-only kit preview: `npm run dev`, open `/kit.html` (`kit.html` + `src/dev/`); not in `dist/`.
+- Per-game themes: hub chrome uses the hub theme; each game owns its play area and scopes its styles to its own root (design doc, "Per-game themes").
+- Verified in Chrome at 375px and 1280px, both themes: no overflow, one-row header, visible focus rings, reduced motion respected, no theme flash in the production build.
 
-**Next (Milestone 2):** Task 9, browser checks at 375px/1280px in both themes, fixes, final verification and review. Session handoff: `.agent/handoff-milestone-2.md`.
+**Next:** decide whether to merge `milestone-2` into `main`, then Milestone 3 (router, catalog, `ArcadePage`, `GameCard`, `GamePage`). `.agent/handoff-milestone-2.md` is historical.
 
 **Milestones 2–10:** not started.
