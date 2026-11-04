@@ -30,8 +30,8 @@
   background-color: var(--color-surface);
 }
 
+/* Smaller text and padding; keeps the 40px minimum target from .btn. */
 .btn--sm {
-  min-height: 32px;
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-sm);
 }
