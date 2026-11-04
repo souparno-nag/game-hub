@@ -8,7 +8,7 @@ Give Game Hub its look and a reusable visual kit before any real screens exist, 
 
 ## Decisions made with the user
 
-- **Aesthetic:** `neobrutalism` skill, in the **Arcade Yellow** direction: off-white page, yellow fills, violet as the second colour, thick dark outlines, hard offset shadows, tight corners, Archivo headings set wide and heavy. The user briefly chose Coral & Mint for its warmth, then switched back to Arcade Yellow; the quieter Ink & Blue option was also rejected.
+- **Aesthetic:** `neobrutalism` skill, in the **Coral & Mint** direction: warm off-white page, coral and mint fills, thick dark outlines, hard offset shadows, rounded corners, Rubik headings. Chosen for its warmth over the louder canonical yellow/violet and the quieter ink/blue options.
 - **Themes:** a real light theme **and** a real dark theme (not light-only).
 - **Theme choice:** follows the device setting by default; a toggle in the header overrides it and the choice is remembered.
 - **Build approach:** B — CSS variables and classes, plus small React components only where a piece carries behaviour or accessibility (see Approaches).
@@ -54,35 +54,33 @@ All tokens are CSS custom properties. Theme-dependent tokens are set under `:roo
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `--color-bg` | `#FBFBF9` | `#17171C` | Page background |
-| `--color-surface` | `#FFFFFF` | `#22222A` | Header, panels, secondary buttons |
-| `--color-ink` | `#141414` | `#F5F3EC` | Body text |
-| `--color-muted` | `#4A4A52` | `#B4B2AC` | Secondary text, hints |
-| `--color-line` | `#141414` | `#F5F3EC` | Outlines and hard shadows |
-| `--color-accent` | `#FDC800` | `#FDC800` | Yellow: primary buttons, brand block (fill only) |
-| `--color-accent-2` | `#432DD7` | `#8B7CFF` | Violet: focus ring in light, reserved for game artwork (M5) |
-| `--color-on-accent` | `#141414` | `#141414` | Text on yellow and on status badges, both themes |
-| `--color-on-accent-2` | `#FFFFFF` | `#141414` | Text on violet fills |
-| `--color-focus` | `#432DD7` | `#FDC800` | Focus ring |
-| `--color-info` | `#A99BFF` | `#A99BFF` | Info status badge |
+| `--color-bg` | `#FFF6EE` | `#1B1614` | Page background |
+| `--color-surface` | `#FFFFFF` | `#28201C` | Header, panels, inputs' container |
+| `--color-ink` | `#1A1410` | `#FFF1E6` | Body text |
+| `--color-muted` | `#5A4E46` | `#C9B8AC` | Secondary text, hints |
+| `--color-line` | `#1A1410` | `#FFF1E6` | Outlines and hard shadows |
+| `--color-accent` | `#FF6B4A` | `#FF7A5C` | Coral: primary buttons, brand block (fill only) |
+| `--color-accent-2` | `#3DDC97` | `#4BE3A3` | Mint: secondary fills |
+| `--color-on-fill` | `#1A1410` | `#1A1410` | Text on any coloured fill, both themes |
+| `--color-focus` | `#1F6FEB` | `#7FB4FF` | Focus ring |
+| `--color-info` | `#8EC5FF` | `#7FB4FF` | Info status badge |
 | `--color-success` | `#3DDC97` | `#4BE3A3` | Success status badge |
-| `--color-warning` | `#FF9F1C` | `#FFA94D` | Warning status badge (orange, so it is not confused with yellow primary) |
+| `--color-warning` | `#FFC845` | `#FFD166` | Warning status badge |
 | `--color-danger` | `#F2555A` | `#FF6B70` | Error status badge, invalid field border |
 
-Measured contrast (WCAG, light / dark): ink on bg 17.8 / 16.1; muted on bg 8.5 / 8.4; `#141414` on yellow 11.8, info 7.7, success 10.4 / 11.2, warning 9.0 / 9.7, danger 5.5 / 6.7; text on violet 8.1 / 5.6; focus ring vs page bg 7.8 / 11.4. Rule: **yellow is never text or an unoutlined shape on the light page** (1.5:1); it is always a fill inside a dark outline. The focus ring must sit **outside** the element (`outline-offset` ≥ 2px) so it is measured against the page, not against the fill.
+Measured contrast (WCAG): ink on bg 17.1 / 16.2; muted on bg 7.5 / 9.3; on-fill text on coral 6.5 / 7.1, mint 10.3 / 11.1, info 10.1 / 8.6, warning 11.8 / 12.7, danger 5.4 / 6.6; focus ring vs page bg 4.3 / 8.4. Rule: **coral is never text on the light page** (2.6:1); it is a fill only. The focus ring must sit **outside** the element (`outline-offset` ≥ 2px) so it is measured against the page, not against coral.
 
 ### Type
 
-- Family: Archivo (variable, weight and width axes), self-hosted via `@fontsource-variable/archivo` using its `wdth.css` entry (no third-party request), fallback `system-ui, sans-serif`. One family; headings get their character from width, not a second typeface.
-- Widths: headings and the brand at `font-stretch: 125%`; body, labels and buttons at normal width (100%).
-- Weights: 400 body, 600 labels and buttons, 800 headings. (One more than the Swiss two-weight rule; the heavy, wide heading is what makes the style read as neobrutalist.)
+- Family: Rubik, self-hosted via `@fontsource-variable/rubik` (no third-party request), fallback `system-ui, sans-serif`.
+- Weights: 400 body, 600 labels and buttons, 800 headings. (One more than the Swiss two-weight rule; the heavy heading weight is what makes the style read as neobrutalist.)
 - Scale: `--text-sm` 0.875rem, `--text-base` 1rem, `--text-lg` 1.25rem, `--text-xl` 1.5rem, `--text-2xl` 2rem (h1 on mobile), 2.5rem for h1 from 768px.
 - Body line-height 1.5, headings 1.1. Body measure capped at ~65ch where text runs long.
 
 ### Space, shape, depth
 
 - Spacing on an 8px base: `--space-1` 4px, `--space-2` 8px, `--space-3` 16px, `--space-4` 24px, `--space-5` 32px, `--space-6` 48px.
-- Radii: `--radius-lg` 6px (panels, header brand block), `--radius-sm` 4px (buttons, inputs, badges).
+- Radii: `--radius-lg` 12px (panels, header brand block), `--radius-sm` 8px (buttons, inputs, badges).
 - Borders: `--border-thick` 3px (panels, header rule), `--border` 2px (controls).
 - Shadows (hard, no blur): `--shadow-sm` `3px 3px 0 var(--color-line)` (controls), `--shadow` `5px 5px 0 var(--color-line)` (panels).
 - Motion: button press only — translate by the shadow offset and drop the shadow, ~80ms. Disabled under `prefers-reduced-motion: reduce`.
@@ -90,7 +88,7 @@ Measured contrast (WCAG, light / dark): ink on bg 17.8 / 16.1; muted on bg 8.5 /
 ## Shell
 
 - Content column: max width 1120px, centred; side padding 16px, 32px from 768px.
-- Header: surface background, thick bottom rule. Left: "Game Hub" brand link set wide and heavy, styled as a yellow block with outline and small shadow. Right: a group holding an empty slot for sign-in (Milestone 7; renders nothing now) and the `ThemeToggle`.
+- Header: surface background, thick bottom rule. Left: "Game Hub" brand link styled as a coral block with outline and small shadow. Right: a group holding an empty slot for sign-in (Milestone 7; renders nothing now) and the `ThemeToggle`.
 - Main: h1 "Arcade", one muted line ("Pick a game. No account needed to play."), then the empty state as an info `StatusMessage` ("No games yet. Starter games are on the way.").
 - Mobile (<768px): single column; header keeps brand and toggle on one row.
 - Existing smoke test (brand link to `/`, h1 "Arcade") must keep passing.
@@ -99,7 +97,7 @@ Measured contrast (WCAG, light / dark): ink on bg 17.8 / 16.1; muted on bg 8.5 /
 
 ### Classes (looks only)
 
-- `.btn` primary: yellow fill, on-accent text, 2px outline, `--shadow-sm`, weight 600. `.btn--secondary`: surface fill, ink text. States: hover (slight shadow growth or none — builder's call, keep subtle), `:focus-visible` ring, `:active` pressed, `:disabled` 50% opacity and no shadow, `cursor: not-allowed`. Minimum target 40px tall.
+- `.btn` primary: coral fill, on-fill text, 2px outline, `--shadow-sm`, weight 600. `.btn--secondary`: surface fill, ink text. States: hover (slight shadow growth or none — builder's call, keep subtle), `:focus-visible` ring, `:active` pressed, `:disabled` 50% opacity and no shadow, `cursor: not-allowed`. Minimum target 40px tall.
 - `.panel`: surface fill, 3px outline, `--radius-lg`, `--shadow`, `--space-3` padding.
 
 ### Components (behaviour/accessibility)
@@ -121,7 +119,7 @@ Measured contrast (WCAG, light / dark): ink on bg 17.8 / 16.1; muted on bg 8.5 /
 - `src/app/App.tsx` updated for the shell.
 - `index.html`: inline theme script.
 - Dev-only kit preview: `kit.html` at the repo root plus `src/dev/KitPreview.tsx`, rendering every kit piece in both states. Vite's dev server serves it at `/kit.html`; the production build only includes `index.html`, so it never ships (verify `dist/` has no `kit.html`).
-- New dependency: `@fontsource-variable/archivo`.
+- New dependency: `@fontsource-variable/rubik`.
 
 ## Testing and verification
 
